@@ -12,7 +12,7 @@ def send_telegram_reply(message):
 
 
 
-    reply = f"Hi {name}! Got your message: {text}."
+    reply = f"Hi {name}! Got your message: {text}. "
 
     reply_url = f"https://api.telegram.org/bot{settings.TELEGRAM_API_TOKEN}/sendMessage"
 
