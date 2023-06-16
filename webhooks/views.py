@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from chat.tasks import send_telegram_reply
 
+
 class TelegramWebhook(APIView):
     def post(self, request, token):
         if token != settings.TELEGRAM_WEBHOOK_TOKEN:
@@ -13,6 +14,7 @@ class TelegramWebhook(APIView):
                 {"error": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED
             )
 
-        send_telegram_reply.delay(request.data)
+        print(request.data)
+        send_telegram_reply(request.data)
 
         return Response({"success": True})
