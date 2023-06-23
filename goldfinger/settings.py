@@ -31,6 +31,10 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
+HOST_URL = 'https://'+ALLOWED_HOSTS[0]
+
+CSRF_TRUSTED_ORIGINS = [HOST_URL]
+CSRF_COOKIE_SECURE = False
 
 # Application definition
 
@@ -124,7 +128,9 @@ USE_TZ = True
 MEDIA_ROOT = ''
 MEDIA_URL = ''
 STATIC_ROOT = ''
-STATIC_URL = '/templates/'
+STATIC_URL = 'templates/'
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -138,5 +144,3 @@ TELEGRAM_WEBHOOK_TOKEN = "lllol"
 CELERY_BROKER_URL = "redis://redis_server:6379/0"
 
 CELERY_RESULT_BACKEND = "redis://redis_server:6379/0"
-
-HOST_URL = 'https://eed8-90-154-70-188.ngrok-free.app'

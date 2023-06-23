@@ -1,80 +1,108 @@
 <!DOCTYPE html>
 <html  lang='ru' dir='ltr'>
 <head>
-    <script type="text/javascript" src="https://telegram.org/js/telegram-web-app.js"></script>
-   <script type="text/javascript">
-   btn.addEventListener('click', function(){ //вешаем событие на нажатие html-кнопки
-	if (tg.MainButton.isVisible){ //если кнопка показана
-		tg.MainButton.hide() //скрываем кнопку
-	}
-  else{ //иначе
-  	tg.MainButton.show() //показываем
-  }
-   });
-      let btnED = document.getElementById("btnED"); //получаем кнопку активировать/деактивировать
-   btnED.addEventListener('click', function(){ //вешаем событие на нажатие html-кнопки
-       if (tg.MainButton.isActive){ //если кнопка показана
-           tg.MainButton.setParams({"color": "#E0FFFF"}); //меняем цвет
-           tg.MainButton.disable() //скрываем кнопку
-       }
-       else{ //иначе
-           tg.MainButton.setParams({"color": "#143F6B"}); //меняем цвет
-           tg.MainButton.enable() //показываем
-       }
-   });
-   let usercard = document.getElementById("usercard"); //получаем блок usercard
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-   let profName = document.createElement('p'); //создаем параграф
-   profName.innerText = `${tg.initDataUnsafe.user.first_name}
-   ${tg.initDataUnsafe.user.last_name}
-   ${tg.initDataUnsafe.user.username} (${tg.initDataUnsafe.user.language_code})`;
-   //выдем имя, "фамилию", через тире username и код языка
-   usercard.appendChild(profName); //добавляем
+<script>
+   let tg = window.Telegram.WebApp; //получаем объект webapp телеграма
 
-   let userid = document.createElement('p'); //создаем еще параграф
-   userid.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
-   usercard.appendChild(userid); //добавляем
-   </script>
+   tg.expand(); //расширяем на все окно
+
+   tg.MainButton.text = "Changed Text"; //изменяем текст кнопки
+   tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
+</script>
    <style>
-      body{
-	color: var(--tg-theme-text-color);
-	background: var(--tg-theme-bg-color);
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	font-size: 18px;
+   body{background: #FF9900;}
+   details{
+     display:block;
+     background: #FFFFFF;
+     box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+     border-radius: 8px;
+     overflow:hidden;
+     margin-bottom: 1.5rem;
    }
-
-   .hint{
-       color: var(--tg-theme-hint-color);
+   summary::-webkit-details-marker{display:none;}
+   summary::-moz-list-bullet{list-style-type:none;}
+   summary::marker{display:none;}
+   summary {
+      display:block;
+      padding: .3em 1em .3em .9em;
+      border-bottom: 1px solid #e2e8f0;
+      font-size:1.4em;
+      cursor: pointer;
+      position: relative;
    }
-
-   .link{
-       color: var(--tg-theme-link-color);
+   summary:before {
+     top: .4em;
+     right: .3em;
+     color: transparent;
+     background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTYuNTkgOC41OUwxMiAxMy4xNyA3LjQxIDguNTkgNiAxMGw2IDYgNi02eiIvPjxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz48L3N2Zz4=") no-repeat 50% 50% / 1em 1em;
+     width: 1em;
+     height: 1em;
+     content: "";
+     position: absolute;
+     transition: transform .5s;
    }
-
-   .button{
-       background: var(--tg-theme-button-color);
-       color: var(--tg-theme-button-text-color);
-       border: none;
-       font-size: 18px;
+   details[open] > summary:before {
+     transform: scale(1,-1);
    }
-
-   .button:not(:last-child){
-       margin-bottom: 20px
+   summary ~ * {
+      padding: 0 1em 10px 1.4em;
    }
-
-   #usercard{
-       text-align: center;
+   details[open] summary ~ *{
+     animation: sweep .5s ease-in-out;
+   }
+   @keyframes sweep {
+     0%    {opacity: 0;}
+     100%  {opacity: 1;}
+   }
+   summary:focus {
+     outline:0;
+     box-shadow: inset 0 0 1px rgba(0,0,0,0.3), inset 0 0 2px rgba(0,0,0,0.3);
+   }
+   .orderbox{
+      display: flex;
+      flex-direction: column;
+   }
+   input{
+      border-radius: 6px;
+   }
+   button{
+      border-radius: 6px;
    }
    </style>
 </head>
 <body>
-   <div id="usercard"> <!--Карта профиля, человека, который к нам обратился-->
-   </div>
-   <p>Just text</p> <!--Просто текст для проверки-->
-   <a class="link" href="https://mihailgok.ru">Link</a> <!--Просто ссылка для проверки-->
-   <p class="hint">Some little hint</p> <!--Просто текст-подсказка для проверки-->
-   <button id="btn" class="button">Show/Hide Main Button</button> <!--Кнопка, чтобы скрыть / показать основную кнопку-->
-   <button id="btnED" class="button">Enable/Disable Main Button</button> <!--Кнопка, чтобы сделать кнопку активной/неактивной-->
+   <details>
+    <summary>Сделать заказ по артикулу</summary>
+      <div class="orderbox">
+         <p>Ваш артикул:</p>
+         <input id="aarticle">
+         <p>Размер изделий:</p>
+         <input id="asize">
+         <p>Количество изделий:</p>
+         <button id="abutton">
+             Отправить запрос
+         </button>
+      </div>
+   </details>
+   <script >
+      var abtn = document.getElementById("abutton")
+      var aartin = document.getElementById("aarticle")
+      var aamin = document.getElementById("asize")
+      abtn.addEventListener('click',function(){
+         var article = aartin.value
+         var size = aamin.value
+         if(!article){
+            alert("Введите, пожалуйста артикул")
+         }
+         else{
+            var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+            var theUrl = "{{MAIN_URL}}/dispatcher/makeArticleRequest";
+            xmlhttp.open("POST", theUrl);
+            xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xmlhttp.send(JSON.stringify({ "article": article, "size": size }));
+         }
+      })
+   </script>
 </body>
