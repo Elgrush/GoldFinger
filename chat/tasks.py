@@ -1,6 +1,7 @@
 import requests
-import json
+from django.db import models
 from django.conf import settings
+from dispatcher.models import UserProfile
 
 
 def send_telegram_reply(message):
@@ -8,24 +9,17 @@ def send_telegram_reply(message):
     text = message["message"]["text"]
     chat_id = message["message"]["chat"]["id"]
 
-
-    keyboard = {
-        "inline_keyboard": [
-            [
-                {
-                    "text": 'Зайти в приложение',
-                    "web_app": {'url': f"{settings.HOST_URL}/webapp/"}
-                }
-            ]
-        ]
-    }
+    '''
+    try:
+        print(UserProfile.objects.get(id=message["message"]["from"]["id"]))
+    except UserProfile.DoesNotExist:
+        pass
+    '''
 
     reply = f"Hi {name}! Got your message: {text}. "
 
     reply_url = f"https://api.telegram.org/bot{settings.TELEGRAM_API_TOKEN}/sendMessage"
 
-    data = {"chat_id": chat_id, "text": reply, "reply_markup": json.dumps(keyboard)}
-
-    print('\n', data['reply_markup'], '\n')
+    data = {"chat_id": chat_id, "text": reply}
 
     requests.post(reply_url, data=data)

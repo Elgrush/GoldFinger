@@ -27,8 +27,9 @@ SECRET_KEY = 'django-insecure-u0$x_d08l@w@1roc4xa*g9@vsbhkw^x2mjro(g0obxoa3nea7h
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'eed8-90-154-70-188.ngrok-free.app',
-    '127.0.0.1'
+    '7d59-90-154-70-188.ngrok-free.app',
+    '127.0.0.1',
+    'localhost'
 ]
 
 HOST_URL = 'https://'+ALLOWED_HOSTS[0]
@@ -47,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     'webhooks',
+    'dispatcher',
+    'chat'
 ]
 
 MIDDLEWARE = [
@@ -64,7 +67,7 @@ ROOT_URLCONF = 'goldfinger.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'static')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,7 +89,7 @@ WSGI_APPLICATION = 'goldfinger.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'Orders.sqlite3',
+        'NAME': 'Orders.db3',
     }
 }
 
@@ -125,10 +128,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-MEDIA_ROOT = ''
-MEDIA_URL = ''
-STATIC_ROOT = ''
-STATIC_URL = 'templates/'
+STATIC_URL = 'static/'
 
 
 
@@ -141,6 +141,6 @@ TELEGRAM_API_TOKEN = '882405535:AAHvf2ynhZA-a1OpTteZH39xQUDAJLRUMmM'
 
 TELEGRAM_WEBHOOK_TOKEN = "lllol"
 
-CELERY_BROKER_URL = "redis://redis_server:6379/0"
-
-CELERY_RESULT_BACKEND = "redis://redis_server:6379/0"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
