@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-u0$x_d08l@w@1roc4xa*g9@vsbhkw^x2mjro(g0obxoa3nea7h
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '7d59-90-154-70-188.ngrok-free.app',
+    '1095-90-154-70-188.ngrok-free.app',
     '127.0.0.1',
     'localhost'
 ]
@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     "rest_framework",
     'webhooks',
     'dispatcher',
-    'chat'
+    'chat',
+    'authorisation'
 ]
 
 MIDDLEWARE = [

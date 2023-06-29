@@ -1,20 +1,5 @@
 from django.db import models
-from django.conf import settings
-
-
-# Профиль пользователя.
-class UserProfile(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.RESTRICT
-    )
-    telegram_id = models.IntegerField(blank=True, null=True)
-    chat_id = models.IntegerField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-
+from authorisation.models import UserProfile
 
 # Выполненные заказы пользователя.
 class Order(models.Model):
@@ -28,7 +13,7 @@ class Order(models.Model):
         return self.name
 
 
-#Запрос по-артикулу
+# Запрос по-артикулу
 class Jewelery_Request(models.Model):
     user = models.ForeignKey(
         UserProfile,

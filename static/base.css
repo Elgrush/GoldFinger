@@ -1,0 +1,48 @@
+form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+p{
+    box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+header{
+  background: #FF9900;
+}
+
+body{
+  background: #FF9900;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+input{
+  border-radius: 8px;
+}
+
+/* Optional: Customize form fields */
+#id_username,
+#id_password1,
+#id_password2 {
+  /* add custom styles here */
+}
+
+/* Optional: Customize form buttons */
+.btn {
+  /* add custom styles here */
+}

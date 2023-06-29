@@ -21,4 +21,5 @@ urlpatterns = [
     path("webhooks/", include("webhooks.urls")),
     path("webapp/", include("webapp.urls")),
     path("dispatcher/", include("dispatcher.urls")),
+    path('authorisation/', include('authorisation.urls')),
 ]
