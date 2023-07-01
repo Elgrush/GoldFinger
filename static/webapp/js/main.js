@@ -13,7 +13,7 @@ abtn.addEventListener('click',function(){
      }
  else{
     var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-    var theUrl = "dispatcher/makeArticleRequest";
+    var theUrl = "dispatcher/makeArticleRequest/";
     xmlhttp.open("POST", theUrl);
     xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlhttp.send(JSON.stringify({ "article": article, "size": size, "amount": amount, "user": user }));

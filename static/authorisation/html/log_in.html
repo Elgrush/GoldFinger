@@ -15,4 +15,6 @@
         <input type="submit" value="Login">
     </form>
     <p>Нет аккаунта? <a href="{% url 'sign_up' %}">Зарегистрироваться</a></p>
+{% load static %}
+<script src="{% static 'authorisation/js/log_in.js' %}"></script>
 {% endblock %}

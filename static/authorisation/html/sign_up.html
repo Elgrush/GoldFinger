@@ -7,4 +7,6 @@
         <button type="submit">Register</button>
         <p>Уже есть аккаунт? <a href="{% url 'log_in' %}">Войти</a></p>
     </form>
+{% load static %}
+<script src="{% static 'authorisation/js/log_in.js' %}"></script>
 {% endblock %}
