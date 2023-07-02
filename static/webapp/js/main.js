@@ -1,4 +1,5 @@
 let tg = window.Telegram.WebApp; //получаем объект webapp телеграма
+tg.expand();
 var abtn = document.getElementById("abutton");
 var aartin = document.getElementById("aarticle");
 var asiin = document.getElementById("asize");

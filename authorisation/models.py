@@ -60,5 +60,26 @@ class EditForm(forms.Form):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(label="Имя пользлвателя:", max_length=100)
+    username = forms.CharField(label="Имя пользователя:", max_length=100)
     password = forms.CharField(widget=forms.PasswordInput, label="Пароль")
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].error_messages['required'] = "Заполните это поле"
+
+
+class PasswordChangeForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput, label="Старый пароль")
+
+    password1 = forms.CharField(widget=forms.PasswordInput, label="Новый пароль",
+                                help_text = "<ul><li>Ваш пароль не должен быть похож на другую Вашу личную " \
+                                "информацию.</li><li>Длина пароля хотя бы 8 символов.</li><li>пароль " \
+                                "должен быть разнообразен.</li><li>Пароль не может состоять только из " \
+                                "цифр.</li></ul>")
+    password2 = forms.CharField(widget=forms.PasswordInput, label="Подтвердите новый пароль",
+                                help_text="Введите тот же пароль для верификации")
+    def __init__(self, *args, **kwargs):
+        super(PasswordChangeForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].error_messages['required'] = "Заполните это поле"

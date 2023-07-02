@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html  lang='ru' dir='ltr'>
-<head>
-    {% load static %}
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'webapp/css/main.css' %}">
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
    <details>
     <summary>Сделать заказ по артикулу</summary>
       <div class="orderbox">
@@ -20,5 +14,6 @@
          </button>
       </div>
    </details>
+{% load static %}
    <script src="{% static 'webapp/js/main.js' %}"></script>
-</body>
+{% endblock %}

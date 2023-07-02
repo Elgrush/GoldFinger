@@ -14,7 +14,7 @@ class Order(models.Model):
 
 
 # Запрос по-артикулу
-class Jewelery_Request(models.Model):
+class JeweleryRequest(models.Model):
     user = models.ForeignKey(
         UserProfile,
         on_delete=models.RESTRICT

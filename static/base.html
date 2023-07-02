@@ -10,7 +10,14 @@
         <ul>
             {% if user.is_authenticated %}
 
-            <li><a href="#">Home</a></li>
+            <li><a href="{% url 'account' %}">Аккаунт</a></li>
+
+            {% endif %}
+        </ul>
+        <ul>
+            {% if user.is_authenticated %}
+
+            <li><a href="/webapp/">Главная страница</a></li>
 
             {% endif %}
         </ul>

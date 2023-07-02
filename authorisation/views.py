@@ -1,4 +1,4 @@
-from authorisation.models import RegistrationForm, EditForm, LoginForm
+from authorisation.models import RegistrationForm, EditForm, LoginForm, PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -27,9 +27,9 @@ def sign_up(request):
 
 
 def log_in(request):
+    form = LoginForm(request.POST)
     if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid:
+        if form.is_valid():
 
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
@@ -45,7 +45,6 @@ def log_in(request):
                     "form": form,
                     'error_message': 'Неверные данные'
                 })
-    form = LoginForm
     return render(request, 'authorisation/html/log_in.html', {
                 "form": form
     })
@@ -95,4 +94,39 @@ def edit_account(request):
         'telephone_number': UserProfile.objects.get(user=request.user).telephone_number
     })
     return render(request, 'authorisation/html/edit_account.html',
+                  {'form': form})
+
+@login_required
+def edit_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.POST)
+        if form.is_valid():
+
+            password = form.cleaned_data.get('password')
+
+            if password != request.user.password:
+                return render(request, 'authorisation/html/edit_password.html',
+                              {'form': form,
+                               'error_message': 'Неверный пароль'})
+
+            password = form.cleaned_data.get('password1')
+
+            if password != form.cleaned_data.get('password2'):
+                return render(request, 'authorisation/html/edit_password.html',
+                              {'form': form,
+                               'error_message': 'Пароли не совпадают'})
+
+            user = request.user
+
+            user.set_password(password)
+
+            user.save()
+
+            return redirect(HOST_URL + '/authorisation/account/')
+        else:
+            return render(request, 'authorisation/html/edit_account.html',
+                          {'form': form,
+                           'error_message': 'Неверные данные'})
+    form = PasswordChangeForm()
+    return render(request, 'authorisation/html/edit_password.html',
                   {'form': form})

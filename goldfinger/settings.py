@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'webhooks',
     'dispatcher',
     'chat',
-    'authorisation'
+    'authorisation',
+    "webapp"
 ]
 
 MIDDLEWARE = [
