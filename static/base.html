@@ -4,18 +4,15 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
-    <title>My Website</title>
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Website</h1>
-    </header>
-
     <nav>
         <ul>
+            {% if user.is_authenticated %}
+
             <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
+
+            {% endif %}
         </ul>
     </nav>
 
@@ -23,9 +20,5 @@
         {% block content %}
         {% endblock %}
     </main>
-
-    <footer>
-        <p>&copy;2021 My Website. All rights reserved.</p>
-    </footer>
 </body>
 </html>

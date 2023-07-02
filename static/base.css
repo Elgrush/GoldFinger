@@ -3,8 +3,12 @@ form {
   margin: 0 auto;
 }
 
-p{
-    box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+p {
+    box-shadow: 0 10px 15px -5px orange, 0 10px 10px -5px orange;
+}
+
+.errorlist {
+    color: red;
 }
 
 header{
@@ -45,4 +49,10 @@ input{
 /* Optional: Customize form buttons */
 .btn {
   /* add custom styles here */
+}
+
+tr {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }

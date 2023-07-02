@@ -8,5 +8,6 @@ django = "*"
 celery = "*"
 djangorestframework = "*"
 requests = "*"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
 
 [dev-packages]

@@ -2,6 +2,8 @@ import json
 from django.contrib.auth.models import User
 from authorisation.models import UserProfile
 from django.views.decorators.csrf import csrf_exempt
+
+
 # Create your views here.
 
 

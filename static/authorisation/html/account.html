@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<table>
+        <tr>
+            <th>Имя пользователя:</th>
+            <td>{{ user.username }}</td>
+            <th>Email:</th>
+            <td>{{ user.email }}</td>
+            <th>Телефон:</th>
+            <td>{{ phone }}</td>
+        </tr>
+</table>
+<form action="{% url 'edit_account' %}" method="get">
+    <input type="submit"  value="Настроить аккаунт">
+</form>
+{% endblock %}
