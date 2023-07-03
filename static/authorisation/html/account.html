@@ -8,6 +8,8 @@
             <td>{{ user.email }}</td>
             <th>Телефон:</th>
             <td>{{ phone }}</td>
+            <th>Адресс курьерской доставки:</th>
+            <td>{{ address }}</td>
         </tr>
 </table>
 <form action="{% url 'edit_account' %}" method="get">

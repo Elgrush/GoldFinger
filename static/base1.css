@@ -62,13 +62,10 @@ button{
   border-radius: 6px;
 }
 
-
-
-
-
-
-
-
+.main_menu{
+    position: fixed;
+    bottom: 0;
+}
 
 p {
     box-shadow: 0 10px 15px -5px orange, 0 10px 10px -5px orange;
@@ -132,5 +129,3 @@ tr {
     flex-direction: column;
     align-items: flex-start;
 }
-
-

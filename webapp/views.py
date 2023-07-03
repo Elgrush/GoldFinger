@@ -7,7 +7,5 @@ from goldfinger.settings import HOST_URL, STATIC_URL
 
 def index(request):
     if not request.user.is_authenticated:
-        return redirect(HOST_URL+'/authorisation/log_in')
-    return render(request, 'webapp/html/index.html',
-                  {"MAIN_URL": HOST_URL, "CSS": STATIC_URL})
-    return HttpResponse(template.render({"MAIN_URL": HOST_URL, "CSS": STATIC_URL}))
+        return redirect('/authorisation/log_in')
+    return render(request, 'webapp/html/index.html')

@@ -3,8 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from authorisation.models import UserProfile
-from goldfinger.settings import HOST_URL
 from django.contrib.auth.decorators import login_required
+from goldfinger.settings import INVITATION_TOKEN
 
 
 # Create your views here.
@@ -12,17 +12,23 @@ def sign_up(request):
     form = RegistrationForm(request.POST)
     if request.method == 'POST':
         if form.is_valid():
+            if form.cleaned_data.get('token') != INVITATION_TOKEN:
+                return render(request, 'authorisation/html/sign_up.html',
+                              {'error_message': 'Неверный токен', 'form': form})
             form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
             login(request, user)
             telephone_number = form.cleaned_data.get('telephone_number')
+            if telephone_number[0] != '+':
+                telephone_number = '+'+str(int(telephone_number[0]) - 1) + telephone_number[1::]
             profile = UserProfile(user=user, telephone_number=telephone_number)
             profile.save()
-            return redirect(HOST_URL + '/webapp/')  # Redirect to the desired page after registration
+            return redirect('/webapp/')  # Redirect to the desired page after registration
         else:
-            return render(request, 'authorisation/html/sign_up.html', {'error_message': 'Неверные данные', 'form': form})
+            return render(request,
+                          'authorisation/html/sign_up.html', {'error_message': 'Неверные данные', 'form': form})
     return render(request, 'authorisation/html/sign_up.html', {'form': form})
 
 
@@ -38,7 +44,7 @@ def log_in(request):
 
             if user is not None:
                 login(request, user)
-                return redirect(HOST_URL + '/webapp/')
+                return redirect('/webapp/')
             else:
                 # Handle invalid credentials
                 return render(request, 'authorisation/html/log_in.html', {
@@ -46,20 +52,23 @@ def log_in(request):
                     'error_message': 'Неверные данные'
                 })
     return render(request, 'authorisation/html/log_in.html', {
-                "form": form
+        "form": form
     })
 
 
 @login_required
 def log_out(request):
     logout(request)
-    return redirect(HOST_URL + '/authorisation/log_in/')
+    return redirect('/authorisation/log_in/')
 
 
 @login_required
 def account(request):
     return render(request, 'authorisation/html/account.html',
-                  {'phone': UserProfile.objects.get(user=request.user).telephone_number})
+                  {
+                      'phone': UserProfile.objects.get(user=request.user).telephone_number,
+                      'address': UserProfile.objects.get(user=request.user).address
+                  })
 
 
 @login_required
@@ -68,22 +77,25 @@ def edit_account(request):
         form = EditForm(request.POST)
         if form.is_valid():
 
-            username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
             telephone_number = form.cleaned_data.get('telephone_number')
+            address = form.cleaned_data.get('address')
+
+            if telephone_number[0] != '+':
+                telephone_number = '+'+str(int(telephone_number[0]) - 1) + telephone_number[1::]
 
             user = request.user
             profile = UserProfile.objects.get(user=user)
 
             profile.telephone_number = telephone_number
+            profile.address = address
             profile.save()
 
-            user.username = username
             user.email = email
 
             user.save()
 
-            return redirect(HOST_URL + '/authorisation/account/')
+            return redirect('/authorisation/account/')
         else:
             return render(request, 'authorisation/html/edit_account.html',
                           {'form': form,
@@ -95,6 +107,7 @@ def edit_account(request):
     })
     return render(request, 'authorisation/html/edit_account.html',
                   {'form': form})
+
 
 @login_required
 def edit_password(request):
@@ -122,7 +135,7 @@ def edit_password(request):
 
             user.save()
 
-            return redirect(HOST_URL + '/authorisation/account/')
+            return redirect('/authorisation/account/')
         else:
             return render(request, 'authorisation/html/edit_account.html',
                           {'form': form,

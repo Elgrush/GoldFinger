@@ -3,29 +3,34 @@
 <head>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'base1.css' %}">
 </head>
 <body>
-    <nav>
-        <ul>
-            {% if user.is_authenticated %}
 
-            <li><a href="{% url 'account' %}">Аккаунт</a></li>
-
-            {% endif %}
-        </ul>
-        <ul>
-            {% if user.is_authenticated %}
-
-            <li><a href="/webapp/">Главная страница</a></li>
-
-            {% endif %}
-        </ul>
-    </nav>
 
     <main>
         {% block content %}
         {% endblock %}
     </main>
+    <footer  class="main_menu">
+        <nav>
+            <ul>
+                {% if user.is_authenticated %}
+
+                <li><a href="{% url 'account' %}">Аккаунт</a></li>
+
+                {% endif %}
+            </ul>
+            <ul>
+                {% if user.is_authenticated %}
+
+                <li><a href="/webapp/">Главная страница</a></li>
+
+                {% endif %}
+            </ul>
+        </nav>
+    </footer>
+
 </body>
+
 </html>

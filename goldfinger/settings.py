@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-u0$x_d08l@w@1roc4xa*g9@vsbhkw^x2mjro(g0obxoa3nea7h
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'a153-90-154-70-188.ngrok-free.app',
+    '1d00-90-154-70-188.ngrok-free.app',
     '127.0.0.1',
     'localhost'
 ]
@@ -146,3 +146,5 @@ TELEGRAM_WEBHOOK_TOKEN = "lllol"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+INVITATION_TOKEN = "КАКАЯТОРАНДОМНАЯХЕРЬЧТОБЫЕЕВЪЕБАТЬ"
