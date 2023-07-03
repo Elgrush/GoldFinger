@@ -1,6 +1,5 @@
 from authorisation.models import RegistrationForm, EditForm, LoginForm, PasswordChangeForm
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from authorisation.models import UserProfile
 from django.contrib.auth.decorators import login_required
@@ -23,7 +22,10 @@ def sign_up(request):
             telephone_number = form.cleaned_data.get('telephone_number')
             if telephone_number[0] != '+':
                 telephone_number = '+'+str(int(telephone_number[0]) - 1) + telephone_number[1::]
-            profile = UserProfile(user=user, telephone_number=telephone_number)
+            profile = UserProfile(user=user, telephone_number=telephone_number,
+                                  name=form.cleaned_data.get('name'),
+                                  surname=form.cleaned_data.get('surname'),
+                                  middle_name=form.cleaned_data.get('middle_name'))
             profile.save()
             return redirect('/webapp/')  # Redirect to the desired page after registration
         else:
@@ -66,6 +68,9 @@ def log_out(request):
 def account(request):
     return render(request, 'authorisation/html/account.html',
                   {
+                      'name': UserProfile.objects.get(user=request.user).name,
+                      'surname': UserProfile.objects.get(user=request.user).surname,
+                      'middle_name': UserProfile.objects.get(user=request.user).middle_name,
                       'phone': UserProfile.objects.get(user=request.user).telephone_number,
                       'address': UserProfile.objects.get(user=request.user).address
                   })
@@ -89,6 +94,11 @@ def edit_account(request):
 
             profile.telephone_number = telephone_number
             profile.address = address
+            profile.name = form.cleaned_data.get('name')
+            profile.surname = form.cleaned_data.get('surname')
+            profile.middle_name = form.cleaned_data.get('middle_name')
+            profile.address = form.cleaned_data.get('address')
+
             profile.save()
 
             user.email = email
@@ -101,9 +111,13 @@ def edit_account(request):
                           {'form': form,
                            'error_message': 'Неверные данные'})
     form = EditForm({
+        'name': UserProfile.objects.get(user=request.user).name,
+        'surname': UserProfile.objects.get(user=request.user).surname,
+        'middle_name': UserProfile.objects.get(user=request.user).middle_name,
         'username': request.user.username,
         'email': request.user.email,
-        'telephone_number': UserProfile.objects.get(user=request.user).telephone_number
+        'telephone_number': UserProfile.objects.get(user=request.user).telephone_number,
+        'address': UserProfile.objects.get(user=request.user).address
     })
     return render(request, 'authorisation/html/edit_account.html',
                   {'form': form})

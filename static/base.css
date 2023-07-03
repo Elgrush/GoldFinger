@@ -67,10 +67,6 @@ button{
     bottom: 0;
 }
 
-p {
-    box-shadow: 0 10px 15px -5px orange, 0 10px 10px -5px orange;
-}
-
 .errorlist {
     color: red;
 }

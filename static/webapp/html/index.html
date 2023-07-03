@@ -1,19 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-   <details>
-    <summary>Сделать заказ по артикулу</summary>
-      <div class="orderbox">
-         <p>Ваш артикул:</p>
-         <input id="aarticle">
-         <p>Размер изделий:</p>
-         <input id="asize">
-         <p>Количество изделий:</p>
-         <input id="aamount">
-         <button id="abutton">
-             Отправить запрос
-         </button>
-      </div>
-   </details>
-{% load static %}
-   <script src="{% static 'webapp/js/main.js' %}"></script>
+    {% if error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
+    <details>
+        <summary>Сделать заказ по артикулу</summary>
+          <div class="orderbox">
+           <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit"  value="Отправить запрос">
+            </form>
+          </div>
+    </details>
 {% endblock %}

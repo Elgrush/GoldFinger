@@ -6,9 +6,9 @@ from .models import UserProfile, PickupAddress
 # Register your models here.
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "telephone_number")
+    list_display = ("user", "name", "surname", "middle_name", "telephone_number")
 
 
 @admin.register(PickupAddress)
-class UserProfileAdmin(admin.ModelAdmin):
+class PickupAddress(admin.ModelAdmin):
     list_display = ("profile", "address")

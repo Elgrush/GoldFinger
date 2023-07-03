@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
     <h2>Регистрация пользователя</h2>
     <form method="POST">
         {% csrf_token %}

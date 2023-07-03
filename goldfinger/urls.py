@@ -20,6 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("webhooks/", include("webhooks.urls")),
     path("webapp/", include("webapp.urls")),
-    path("dispatcher/", include("dispatcher.urls")),
     path('authorisation/', include('authorisation.urls')),
+    path('regis/', include('regis.urls')),
 ]

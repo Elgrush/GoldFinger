@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     'webhooks',
-    'dispatcher',
     'chat',
     'authorisation',
     "webapp"

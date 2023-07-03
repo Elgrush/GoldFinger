@@ -1,7 +1,5 @@
 import requests
-from django.db import models
 from django.conf import settings
-from dispatcher.models import UserProfile
 
 
 def send_telegram_reply(message):

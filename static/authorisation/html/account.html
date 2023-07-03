@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
 <table>
         <tr>
-            <th>Имя пользователя:</th>
+            <th>Ник:</th>
             <td>{{ user.username }}</td>
+            <th>Имя:</th>
+            <td>{{ name }}</td>
+            <th>Фамилия:</th>
+            <td>{{ surname }}</td>
+            <th>Отчество:</th>
+            <td>{{ middle_name }}</td>
             <th>Email:</th>
             <td>{{ user.email }}</td>
             <th>Телефон:</th>
@@ -13,7 +22,7 @@
         </tr>
 </table>
 <form action="{% url 'edit_account' %}" method="get">
-    <input type="submit"  value="Настроить аккаунт">
+    <input type="submit"  value="Настроить профиль">
 </form>
 <form action="{% url 'log_out' %}" method="get">
     <input type="submit"  value="Выйти из аккаунта">

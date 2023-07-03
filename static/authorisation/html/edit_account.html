@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
+<li><a href="/authorisation/account/">Вернуться в профиль</a></li>
+{% if error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
 <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
