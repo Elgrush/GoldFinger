@@ -4,7 +4,10 @@ from django.conf import settings
 
 def send_telegram_reply(message):
     name = message["message"]["from"]["first_name"]
-    text = message["message"]["text"]
+    try:
+        text = message["message"]["text"]
+    except:
+        text = ""
     chat_id = message["message"]["chat"]["id"]
 
     '''
