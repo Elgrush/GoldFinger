@@ -1,15 +1,15 @@
 from django.db import models
-from webapp.models import ArticleOrder
+from webapp.models import ArticleRequest
 from django import forms
 
 
 # Create your models here.
-class ArticleRequest(forms.ModelForm):
+class ArticleRequestForm(forms.ModelForm):
     field_order = ["profile"]
     profile = forms.CharField()
 
     class Meta:
-        model = ArticleOrder
+        model = ArticleRequest
         fields = ["article", "size", "amount"]
 
     def show(self, model):
