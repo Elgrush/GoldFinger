@@ -29,6 +29,13 @@
 
                 {% endif %}
             </ul>
+            <ul>
+                {% if user.is_superuser %}
+
+                <li><a href="/regis/">Управление</a></li>
+
+                {% endif %}
+            </ul>
         </nav>
     </footer>
 

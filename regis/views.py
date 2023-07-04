@@ -8,8 +8,8 @@ def menu(request):
     if request.user.is_superuser:
         forms = []
         for order in ArticleOrder.objects.all():
-            a = ArticleRequest(order)
-            print(a)
-            forms.append(a)
-        print(forms)
-        return render(request, 'regis/html/menu.html')
+            form = ArticleRequest()
+            form.Meta.model = order
+            form.show(order)
+            forms.append(form)
+        return render(request, 'regis/html/menu.html', {'forms': forms})

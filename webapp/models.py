@@ -37,3 +37,7 @@ class ArticleOrderForm(forms.Form):
         super(ArticleOrderForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].error_messages['required'] = "Заполните это поле"
+
+    def lock(self):
+        for field in self.fields:
+            self.fields[field].widget.attrs['readonly'] = True

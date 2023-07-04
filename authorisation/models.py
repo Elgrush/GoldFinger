@@ -89,7 +89,7 @@ class EditForm(forms.Form):
                                         error_messages={
                                             'invalid': "Номер телефона должен соответствовать стандарту: "
                                                        "'+999999999'. Доступно не более 15ти цифр."
-                                        }, label="Номер телефона")
+                                        }, label="Номер телефона:")
     address = forms.CharField(label="Адресс курьерской доставки", required=False)
 
 

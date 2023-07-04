@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+        <h1>Подтвердите данные</h1>
+           <form action="{% url 'confirm' %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit"  value="Подтвердить">
+           </form>
+              <form action="{% url 'index' %}" method="POST">
+                  {% csrf_token %}
+                  <div style="display: None;">
+                  {{ form.as_p }}
+                  </div>
+                <input type="submit"  value="Назад">
+            </form>
+{% endblock %}
