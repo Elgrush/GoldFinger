@@ -6,12 +6,12 @@ from .models import ArticleRequest, Order, Factory
 # Register your models here.
 @admin.register(ArticleRequest)
 class ArticleRequest(admin.ModelAdmin):
-    list_display = ("profile", "article", "size", "amount")
+    list_display = ("user", "article", "size", "amount", "factory", "created_at", "updated_at")
 
 
 @admin.register(Order)
 class Order(admin.ModelAdmin):
-    list_display = ("profile", )
+    list_display = ("user", "created_at", "updated_at")
 
 
 @admin.register(Factory)

@@ -6,7 +6,7 @@
                 {{ form.as_p }}
                 <input type="submit"  value="Подтвердить">
            </form>
-              <form action="{% url 'index' %}" method="POST">
+              <form action="{% url 'edit_form' %}" method="POST">
                   {% csrf_token %}
                   <div style="display: None;">
                   {{ form.as_p }}

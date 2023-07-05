@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import ArticleRequest, ArticleRequestForm
+from .models import ArticleRequest, ArticleRequestForm, Factory
 from authorisation.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.template import loader
@@ -15,7 +15,14 @@ def index(request):
         return redirect('/authorisation/log_in')
     form = ArticleRequestForm(request.POST)
     if form.is_valid():
+        form.lock()
         return render(request, 'webapp/html/confirm.html', {'form': form})
+    return render(request, 'webapp/html/index.html', {'form': form})
+
+
+@login_required
+def edit_form(request):
+    form = ArticleRequestForm(request.POST)
     return render(request, 'webapp/html/index.html', {'form': form})
 
 
@@ -25,11 +32,21 @@ def confirm(request):
     if request.method == 'POST':
         if form.is_valid():
             order = ArticleRequest(
-                profile=UserProfile.objects.get(user=request.user),
+                user=request.user,
                 article=form.cleaned_data.get('article'),
                 size=form.cleaned_data.get('size'),
                 amount=form.cleaned_data.get('amount'),
-                factory=form.cleaned_data.get('factory')
+                factory=Factory.objects.all()[int(form.cleaned_data.get('factory'))]
             )
             order.save()
             return redirect('/webapp/')
+
+
+@login_required
+def order_history(request):
+    pass
+
+
+@login_required
+def request_history(request):
+    pass
