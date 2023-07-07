@@ -54,5 +54,6 @@ def request_history(request):
         form = ArticleRequestShowForm()
         form.Meta.model = order
         form.show(order)
+        form.hide_user()
         forms.append(form)
     return render(request, 'webapp/html/request_history.html', {'forms': forms})

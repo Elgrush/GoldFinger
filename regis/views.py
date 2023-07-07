@@ -19,15 +19,19 @@ def menu(request):
 def answer_request(request):
     if request.user.is_superuser:
         if request.method == "POST":
+            if str(request.body).count("size") == 2:
+                answer = ArticleRequestAnswer(
+                    request=ArticleRequest.objects.get(id=request.POST["ArticleRequestId"]),
+                    size=request.POST.get('size'),
+                    amount=request.POST.get('amount'),
+                    factory=Factory.objects.get(id=request.POST["factory"])
+                )
+                answer.save()
             origform = ArticleRequestShowForm()
             origform.Meta.model = ArticleRequest.objects.get(
-                user=User.objects.get(username=request.POST["user"]),
-                article=request.POST["article"],
-                size=request.POST["size"],
-                amount=request.POST["amount"],
-                factory=Factory.objects.get(name=request.POST["factory"])
+                id=request.POST["ArticleRequestId"]
             )
             origform.show(origform.Meta.model)
             form = ArticleRequestAnswerForm()
-            form.Meta.model =
-            return render(request, 'regis/html/answer_request.html', {'origform': origform})
+            form.initial["ArticleRequestId"] = request.POST["ArticleRequestId"]
+            return render(request, 'regis/html/answer_request.html', {'origform': origform, 'form': form})

@@ -5,7 +5,7 @@ from webapp.models import ArticleRequestForm, Factory, ArticleRequest
 
 # Create your models here.
 class ArticleRequestAnswer(models.Model):
-    size = models.CharField(max_length=150)
+    size = models.IntegerField()
     amount = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     factory = models.ForeignKey(
@@ -19,8 +19,14 @@ class ArticleRequestAnswer(models.Model):
 
 
 class ArticleRequestAnswerForm(forms.ModelForm):
-    request_id = forms.IntegerField()
+    ArticleRequestId = forms.IntegerField(widget=forms.TextInput(attrs={'style': 'display: none'}), label="")
 
     class Meta:
         model = ArticleRequestAnswer
         fields = ["size", "amount", "factory"]
+
+    def __init__(self, *args, **kwargs):
+        super(ArticleRequestAnswerForm, self).__init__(*args, **kwargs)
+        self.fields['size'].label = "Размер:"
+        self.fields['amount'].label = "Количество:"
+        self.fields['factory'].label = "Завод изготовитель:"

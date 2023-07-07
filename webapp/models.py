@@ -35,7 +35,7 @@ class ArticleRequest(models.Model):
 
     )
     article = models.CharField(max_length=31)
-    size = models.CharField(max_length=150)
+    size = models.IntegerField()
     amount = models.IntegerField()
     factory = models.ForeignKey(
         Factory,
@@ -49,8 +49,10 @@ class ArticleRequest(models.Model):
 
 
 class ArticleRequestForm(forms.Form):
+    field_order = ["factory"]
+
     article = forms.CharField(label="Артикул:")
-    size = forms.CharField(label="Размер изделий:")
+    size = forms.IntegerField(label="Размер изделий:")
     amount = forms.IntegerField(label="Количество изделий:")
     factory = forms.ChoiceField(choices=((i, Factory.objects.all()[i].name) for i in range(len(Factory.objects.all()))))
     locked = False
@@ -77,16 +79,21 @@ class ArticleRequestForm(forms.Form):
 
 
 class ArticleRequestShowForm(forms.ModelForm):
-    field_order = ["user"]
+    field_order = ["factory", "user"]
     user = forms.CharField()
     request_time = forms.CharField()
     answer_time = forms.CharField()
+    ArticleRequestId = forms.IntegerField(widget=forms.TextInput(attrs={'style': 'display: none'}), label="")
 
     class Meta:
         model = ArticleRequest
         fields = ["article", "size", "amount", "factory"]
 
     factory = forms.CharField()
+
+    def hide_user(self):
+        self.fields['user'].widget.attrs.update({'style': 'display: none'})
+        self.fields['user'].label = ""
 
     def show(self, model):
         self.initial['user'] = model.user
@@ -98,6 +105,7 @@ class ArticleRequestShowForm(forms.ModelForm):
         self.initial['answer_time'] = str(model.updated_at).split('.')[0]
         if model.created_at == model.updated_at:
             self.initial['answer_time'] = "Ещё в обработке"
+        self.initial['ArticleRequestId'] = model.id
 
         self.fields['user'].label = "Ник:"
         self.fields['article'].label = "Артикул:"
@@ -105,7 +113,7 @@ class ArticleRequestShowForm(forms.ModelForm):
         self.fields['amount'].label = "Количество:"
         self.fields['factory'].label = "Завод изготовитель:"
         self.fields['request_time'].label = "Время создания"
-        self.fields['answer_time'].label = "Время ответа"
+        self.fields['answer_time'].label = "Ответ"
 
         for field in self.fields:
             self.fields[field].widget.attrs['readonly'] = True
