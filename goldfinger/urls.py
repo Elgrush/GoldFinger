@@ -22,4 +22,5 @@ urlpatterns = [
     path("webapp/", include("webapp.urls")),
     path('authorisation/', include('authorisation.urls')),
     path('regis/', include('regis.urls')),
+    path("", include("webapp.urls")),
 ]

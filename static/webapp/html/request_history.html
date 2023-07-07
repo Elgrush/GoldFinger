@@ -2,13 +2,12 @@
 {% block content %}
 <p>Приветствуем, {{ user.username }}</p>
 {% if not forms %}
-<p>Запросов пока не поступало.</p>
+<p>От вас пока не поступало запросов.</p>
 {% endif %}
 {% for form in forms %}
-    <form action="{% url 'answer_request' %}" method="POST">
+    <form method="POST">
         {% csrf_token %}
         {{ form.as_table }}
-        <input type="submit"  value="Ответить на запрос">
     </form>
 {% endfor %}
 {% endblock %}

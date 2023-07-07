@@ -28,7 +28,7 @@ class UserProfile(models.Model):
 
 # Адресс самовывоза
 class PickupAddress(models.Model):
-    profile = models.OneToOneField(
+    profile = models.ForeignKey(
         UserProfile,
         on_delete=models.CASCADE
     )

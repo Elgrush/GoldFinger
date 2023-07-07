@@ -30,6 +30,13 @@
                 {% endif %}
             </ul>
             <ul>
+                {% if user.is_authenticated %}
+
+                <li><a href="/webapp/request_history/">История запросов</a></li>
+
+                {% endif %}
+            </ul>
+            <ul>
                 {% if user.is_superuser %}
 
                 <li><a href="/regis/">Управление</a></li>

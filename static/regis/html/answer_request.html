@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>Приветствуем, {{ user.username }}</p>
+<form>
+      {% csrf_token %}
+      {{ form.as_table }}
+</form>
+
+{% endblock %}
