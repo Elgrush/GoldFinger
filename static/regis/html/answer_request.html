@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 <p>Приветствуем, {{ user.username }}</p>
-<form>
+
+<form action="{% url 'answer_request' %}" method="POST">
       {% csrf_token %}
+      {{ origform.as_table }}
+      <p>Ответ:</p>
       {{ form.as_table }}
+      <input type="submit"  value="Отправить ответ">
 </form>
 
 {% endblock %}
