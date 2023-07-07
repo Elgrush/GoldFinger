@@ -1,30 +1,26 @@
 from django.db import models
-from webapp.models import ArticleRequest
 from django import forms
+from webapp.models import ArticleRequestForm, Factory, ArticleRequest
 
 
 # Create your models here.
-class ArticleRequestForm(forms.ModelForm):
-    field_order = ["user"]
-    user = forms.CharField()
+class ArticleRequestAnswer(models.Model):
+    size = models.CharField(max_length=150)
+    amount = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    factory = models.ForeignKey(
+        Factory,
+        on_delete=models.CASCADE
+    )
+    request = models.ForeignKey(
+        ArticleRequest,
+        on_delete=models.CASCADE
+    )
+
+
+class ArticleRequestAnswerForm(forms.ModelForm):
+    request_id = forms.IntegerField()
 
     class Meta:
-        model = ArticleRequest
-        fields = ["article", "size", "amount", "factory"]
-
-    factory = forms.CharField()
-
-    def show(self, model):
-        for field in self.fields:
-            self.fields[field].widget.attrs['readonly'] = True
-        self.initial['user'] = model.user
-        self.initial['article'] = model.article
-        self.initial['size'] = model.size
-        self.initial['amount'] = model.amount
-        self.initial['factory'] = model.factory
-
-        self.fields['user'].label = "Ник:"
-        self.fields['article'].label = "Артикул:"
-        self.fields['size'].label = "Размер:"
-        self.fields['amount'].label = "Количество:"
-        self.fields['factory'].label = "Завод изготовитель:"
+        model = ArticleRequestAnswer
+        fields = ["size", "amount", "factory"]

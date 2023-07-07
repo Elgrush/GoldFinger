@@ -74,3 +74,38 @@ class ArticleRequestForm(forms.Form):
             except KeyError:
                 self.locked = False
                 return self.locked
+
+
+class ArticleRequestShowForm(forms.ModelForm):
+    field_order = ["user"]
+    user = forms.CharField()
+    request_time = forms.CharField()
+    answer_time = forms.CharField()
+
+    class Meta:
+        model = ArticleRequest
+        fields = ["article", "size", "amount", "factory"]
+
+    factory = forms.CharField()
+
+    def show(self, model):
+        self.initial['user'] = model.user
+        self.initial['article'] = model.article
+        self.initial['size'] = model.size
+        self.initial['amount'] = model.amount
+        self.initial['factory'] = model.factory
+        self.initial['request_time'] = str(model.created_at).split('.')[0]
+        self.initial['answer_time'] = str(model.updated_at).split('.')[0]
+        if model.created_at == model.updated_at:
+            self.initial['answer_time'] = "Ещё в обработке"
+
+        self.fields['user'].label = "Ник:"
+        self.fields['article'].label = "Артикул:"
+        self.fields['size'].label = "Размер:"
+        self.fields['amount'].label = "Количество:"
+        self.fields['factory'].label = "Завод изготовитель:"
+        self.fields['request_time'].label = "Время создания"
+        self.fields['answer_time'].label = "Время ответа"
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['readonly'] = True

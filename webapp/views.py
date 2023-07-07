@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import ArticleRequest, ArticleRequestForm, Factory
+from .models import ArticleRequest, ArticleRequestForm, Factory, ArticleRequestShowForm
 from authorisation.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.template import loader
@@ -49,4 +49,10 @@ def order_history(request):
 
 @login_required
 def request_history(request):
-    pass
+    forms = []
+    for order in ArticleRequest.objects.filter(user=request.user):
+        form = ArticleRequestShowForm()
+        form.Meta.model = order
+        form.show(order)
+        forms.append(form)
+    return render(request, 'webapp/html/request_history.html', {'forms': forms})
