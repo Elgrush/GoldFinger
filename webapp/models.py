@@ -119,10 +119,12 @@ class ArticleRequestForm(forms.Form):
                             label="Размер изделий:",
                             error_messages={'invalid': "Неправильный размер."}, required=False)
     amount = forms.IntegerField(label="Количество изделий:")
-    factory = forms.ChoiceField(choices=([('', '----')]+list((i, Factory.objects.all()[i].name) for i in range(len(Factory.objects.all())))),
+    factory = forms.ChoiceField(
+        choices=([('', '----')] + list((i, Factory.objects.all()[i].name) for i in range(len(Factory.objects.all())))),
         label="Завод изготовитель")
     type = forms.ChoiceField(
-        choices=([('', '----')]+list((i, JeweleryType.objects.all()[i].name) for i in range(len(JeweleryType.objects.all())))),
+        choices=([('', '----')] + list(
+            (i, JeweleryType.objects.all()[i].name) for i in range(len(JeweleryType.objects.all())))),
         label="Тип изделия")
 
     def __init__(self, *args, **kwargs):
@@ -135,7 +137,6 @@ class ArticleRequestForm(forms.Form):
             self.fields[field].widget.attrs['readonly'] = True
         if not self.fields['size'].initial:
             self.fields['size'].widget.attrs.update({'style': 'display: none'})
-            self.fields['size'].label = ""
 
         self.fields['factory'].choices = ((int(self.cleaned_data.get('factory')),
                                            Factory.objects.all()[int(self.cleaned_data.get('factory'))]),)
