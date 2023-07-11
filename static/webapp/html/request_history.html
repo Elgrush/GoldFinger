@@ -5,9 +5,8 @@
 <p>От вас пока не поступало запросов.</p>
 {% endif %}
 {% for form in forms %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_table }}
+    <form>
+        {{ form }}
     </form>
 {% endfor %}
 {% endblock %}

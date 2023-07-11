@@ -1,37 +1,35 @@
-from django.shortcuts import render
-from webapp.models import ArticleRequest, ArticleRequestShowForm, Factory
-from.models import ArticleRequestAnswer, ArticleRequestAnswerForm
-from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from webapp.models import ArticleRequest, ArticleRequestShowForm, Factory, \
+    ArticleRequestAnswer, ArticleRequestAnswerForm, ArticleRequestAnswerShowForm
+from django.db.utils import IntegrityError
+from webapp.utils import owr
 
 
 # Create your views here.
 def menu(request):
     if request.user.is_superuser:
-        forms = []
-        for order in ArticleRequest.objects.all():
-            form = ArticleRequestShowForm()
-            form.Meta.model = order
-            form.show(order)
-            forms.append(form)
-        return render(request, 'regis/html/menu.html', {'forms': forms})
-
-
-def answer_request(request):
-    if request.user.is_superuser:
-        if request.method == "POST":
-            if str(request.body).count("size") == 2:
-                answer = ArticleRequestAnswer(
-                    request=ArticleRequest.objects.get(id=request.POST["ArticleRequestId"]),
-                    size=request.POST.get('size'),
-                    amount=request.POST.get('amount'),
-                    factory=Factory.objects.get(id=request.POST["factory"])
+        if request.method == "GET":
+            forms = []
+            for order in ArticleRequest.objects.all():
+                form_0 = ArticleRequestShowForm()
+                form_0.Meta.model = order
+                form_0.show(order)
+                form_1 = ArticleRequestAnswerShowForm()
+                form_1.show(
+                    order.get_answer()
                 )
-                answer.save()
-            origform = ArticleRequestShowForm()
-            origform.Meta.model = ArticleRequest.objects.get(
-                id=request.POST["ArticleRequestId"]
+                forms.append(form_0.as_table()+form_1.as_table())
+            forms = owr(forms)
+            return render(request, 'regis/html/menu.html', {'forms': forms})
+        if request.method == "POST":
+            answer = ArticleRequestAnswer(
+                request=ArticleRequest.objects.get(id=request.POST["ArticleRequestId"]),
+                amount=request.POST.get('amount')
             )
-            origform.show(origform.Meta.model)
-            form = ArticleRequestAnswerForm()
-            form.initial["ArticleRequestId"] = request.POST["ArticleRequestId"]
-            return render(request, 'regis/html/answer_request.html', {'origform': origform, 'form': form})
+            try:
+                answer.save()
+            except IntegrityError:
+                ArticleRequestAnswer.objects.get(
+                    request=ArticleRequest.objects.get(id=request.POST["ArticleRequestId"])).delete()
+                answer.save()
+        return redirect("/regis/")

@@ -1,10 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import ArticleRequest, ArticleRequestForm, Factory, ArticleRequestShowForm
+from .models import ArticleRequest, ArticleRequestForm, Factory, ArticleRequestShowForm,\
+    ArticleRequestAnswerShowForm, JeweleryType
 from authorisation.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.template import loader
 from goldfinger.settings import HOST_URL, STATIC_URL
+from .utils import owr
 
 
 # Create your views here.
@@ -36,7 +38,8 @@ def confirm(request):
                 article=form.cleaned_data.get('article'),
                 size=form.cleaned_data.get('size'),
                 amount=form.cleaned_data.get('amount'),
-                factory=Factory.objects.all()[int(form.cleaned_data.get('factory'))]
+                factory=Factory.objects.all()[int(form.cleaned_data.get('factory'))],
+                type=JeweleryType.objects.all()[int(form.cleaned_data.get('type'))]
             )
             order.save()
             return redirect('/webapp/')
@@ -51,9 +54,13 @@ def order_history(request):
 def request_history(request):
     forms = []
     for order in ArticleRequest.objects.filter(user=request.user):
-        form = ArticleRequestShowForm()
-        form.Meta.model = order
-        form.show(order)
-        form.hide_user()
-        forms.append(form)
+        form_0 = ArticleRequestShowForm()
+        form_0.show(order)
+        form_0.hide_for_user()
+        form_1 = ArticleRequestAnswerShowForm()
+        form_1.show(
+            order.get_answer()
+        )
+        forms.append(form_0.as_table()+form_1.as_table())
+    forms = owr(forms)
     return render(request, 'webapp/html/request_history.html', {'forms': forms})

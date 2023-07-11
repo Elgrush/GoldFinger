@@ -1,14 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <p>Приветствуем, {{ user.username }}</p>
+
 {% if not forms %}
+
 <p>Запросов пока не поступало.</p>
+
 {% endif %}
+
 {% for form in forms %}
-    <form action="{% url 'answer_request' %}" method="POST">
+    <form action="." method="POST" class="request_form">
         {% csrf_token %}
-        {{ form.as_table }}
-        <input type="submit"  value="Ответить на запрос">
+        {{ form }}
     </form>
 {% endfor %}
+
+{% load static %}
+<script
+  src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+  crossorigin="anonymous"></script>
+<script src="{% static 'regis/js/submit_answers.js' %}"></script>
+
 {% endblock %}
