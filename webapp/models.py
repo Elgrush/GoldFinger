@@ -112,17 +112,17 @@ class ArticleRequestAnswerShowForm(forms.ModelForm):
 
 
 class ArticleRequestForm(forms.Form):
-    field_order = ["factory"]
+    field_order = ["factory", "article", "type", "size", "amount"]
 
     article = forms.CharField(label="Артикул:")
     size = forms.RegexField(regex=r'^([0-9,.\-/\\]+)+$',
                             label="Размер изделий:",
                             error_messages={'invalid': "Неправильный размер."}, required=False)
     amount = forms.IntegerField(label="Количество изделий:")
-    factory = forms.ChoiceField(choices=((i, Factory.objects.all()[i].name) for i in range(len(Factory.objects.all()))),
+    factory = forms.ChoiceField(choices=([('', '----')]+list((i, Factory.objects.all()[i].name) for i in range(len(Factory.objects.all())))),
         label="Завод изготовитель")
     type = forms.ChoiceField(
-        choices=((i, JeweleryType.objects.all()[i].name) for i in range(len(JeweleryType.objects.all()))),
+        choices=([('', '----')]+list((i, JeweleryType.objects.all()[i].name) for i in range(len(JeweleryType.objects.all())))),
         label="Тип изделия")
 
     def __init__(self, *args, **kwargs):
@@ -133,6 +133,10 @@ class ArticleRequestForm(forms.Form):
     def lock(self):
         for field in self.fields:
             self.fields[field].widget.attrs['readonly'] = True
+        if not self.fields['size'].initial:
+            self.fields['size'].widget.attrs.update({'style': 'display: none'})
+            self.fields['size'].label = ""
+
         self.fields['factory'].choices = ((int(self.cleaned_data.get('factory')),
                                            Factory.objects.all()[int(self.cleaned_data.get('factory'))]),)
         self.fields['type'].choices = ((int(self.cleaned_data.get('type')),
@@ -140,7 +144,7 @@ class ArticleRequestForm(forms.Form):
 
 
 class ArticleRequestShowForm(forms.ModelForm):
-    field_order = ["factory", "user"]
+    field_order = ["factory", "user", "article", "type", "size", "amount"]
     user = forms.CharField()
     request_time = forms.CharField()
     answer_time = forms.CharField()
@@ -157,6 +161,10 @@ class ArticleRequestShowForm(forms.ModelForm):
         self.fields['user'].label = ""
         self.fields['request_time'].widget.attrs.update({'style': 'display: none'})
         self.fields['request_time'].label = ""
+
+    def hide_user(self):
+        self.fields['user'].widget.attrs.update({'style': 'display: none'})
+        self.fields['user'].label = ""
 
     def get_answer(self):
         request = ArticleRequest.objects.get(id=self.data['ArticleRequestId'])
@@ -189,3 +197,7 @@ class ArticleRequestShowForm(forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs['readonly'] = True
+
+        if not self.initial['size']:
+            self.fields['size'].widget.attrs.update({'style': 'display: none'})
+            self.fields['size'].label = ""

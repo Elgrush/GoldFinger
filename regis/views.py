@@ -14,6 +14,7 @@ def menu(request):
                 form_0 = ArticleRequestShowForm()
                 form_0.Meta.model = order
                 form_0.show(order)
+                form_0.hide_user()
                 form_1 = ArticleRequestAnswerShowForm()
                 form_1.show(
                     order.get_answer()
