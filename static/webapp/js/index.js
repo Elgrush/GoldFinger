@@ -10,6 +10,7 @@ function findLableForControl(el) {
 function hideField(field, label){
     field.setAttribute('style', "display: none");
     label.setAttribute('style', "display: none");
+    field.value = "";
     field.required = false;
 }
 
