@@ -11,6 +11,7 @@ const size_field = document.getElementById("id_size");
 
 const size_label = findLableForControl(size_field);
 
-if (size_field.getAttribute('style') == "display: none"){
+if (size_field.value == ""){
+    size_field.setAttribute('style', "display: none");
     size_label.setAttribute('style', "display: none");
 }

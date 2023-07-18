@@ -10,5 +10,5 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 
 @admin.register(PickupAddress)
-class PickupAddress(admin.ModelAdmin):
+class PickupAddressAdmin(admin.ModelAdmin):
     list_display = ("profile", "address")
