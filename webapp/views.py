@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import ArticleRequest, ArticleRequestForm, Factory, ArticleRequestShowForm,\
-    ArticleRequestAnswerShowForm, JeweleryType
+    ArticleRequestAnswerShowForm, JeweleryType, CatalogItem, CatalogCreationForm
 from authorisation.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.template import loader
@@ -64,3 +64,13 @@ def request_history(request):
         forms.append(form_0.as_table()+form_1.as_table())
     forms = owr(forms)
     return render(request, 'webapp/html/request_history.html', {'forms': forms})
+
+
+@login_required
+def catalog(request):
+    forms = []
+    for catalogObj in CatalogItem.objects.all():
+        form = CatalogCreationForm()
+        form.show(catalogObj)
+        forms.append(form.as_table())
+    return render(request, 'webapp/html/catalog.html', {'forms': forms})

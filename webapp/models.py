@@ -135,8 +135,6 @@ class ArticleRequestForm(forms.Form):
     def lock(self):
         for field in self.fields:
             self.fields[field].widget.attrs['readonly'] = True
-        if not self.fields['size'].initial:
-            self.fields['size'].widget.attrs.update({'style': 'display: none'})
 
         self.fields['factory'].choices = ((int(self.cleaned_data.get('factory')),
                                            Factory.objects.all()[int(self.cleaned_data.get('factory'))]),)
@@ -202,3 +200,28 @@ class ArticleRequestShowForm(forms.ModelForm):
         if not self.initial['size']:
             self.fields['size'].widget.attrs.update({'style': 'display: none'})
             self.fields['size'].label = ""
+
+
+class CatalogItem(models.Model):
+    article = models.CharField(max_length=32)
+    size = models.CharField(max_length=32)
+    photo = models.ImageField(upload_to="images")
+
+
+class CatalogCreationForm(forms.ModelForm):
+    class Meta:
+        model = CatalogItem
+        exclude = []
+
+    def show(self, model):
+        for field in self.fields:
+            self.fields[field].widget.attrs['readonly'] = True
+
+        if model:
+            for field in self.fields:
+                self.initial[field] = model.__getattribute__(field)
+
+        else:
+            for field in self.fields:
+                self.fields[field].label = ""
+                self.fields[field].widget.attrs.update({'style': 'display: none'})
