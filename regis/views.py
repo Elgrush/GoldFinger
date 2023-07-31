@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from webapp.models import ArticleRequest, ArticleRequestShowForm, Factory, \
-    ArticleRequestAnswer, ArticleRequestAnswerForm, ArticleRequestAnswerShowForm, CatalogItem, CatalogCreationForm
+from webapp.models import ArticleRequest, Factory, ArticleRequestAnswer, CatalogItem
+from webapp.forms import ArticleRequestShowForm, ArticleRequestAnswerForm, ArticleRequestAnswerShowForm, CatalogItemForm
+from django.forms import modelformset_factory
 from django.db.utils import IntegrityError
 from webapp.utils import owr
 
@@ -38,11 +39,13 @@ def menu(request):
 
 def create_lot(request):
     if request.user.is_superuser:
+        ImageFormSet = modelformset_factory(Images,
+                                            form=ImageForm, extra=3)
         if request.method == "POST":
-            form = CatalogCreationForm(request.POST, request.FILES)
+            form = CatalogItemForm(request.POST, request.FILES)
             if form.is_valid():
                 form.save()
             else:
                 return render(request, 'regis/html/create_lot.html', {'form': form})
-        form = CatalogCreationForm
+        form = CatalogItemForm
         return render(request, 'regis/html/create_lot.html', {'form': form})

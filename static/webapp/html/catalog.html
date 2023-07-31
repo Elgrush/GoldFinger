@@ -3,7 +3,7 @@
 {% for form in forms %}
 <form>
     {% csrf_token %}
-    {{ form }}
+    {{ form.as_table }}
 </form>
 {% endfor %}
 {% load static %}

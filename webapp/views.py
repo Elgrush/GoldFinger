@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import ArticleRequest, ArticleRequestForm, Factory, ArticleRequestShowForm,\
-    ArticleRequestAnswerShowForm, JeweleryType, CatalogItem, CatalogCreationForm
+from .models import ArticleRequest, Factory, JeweleryType, CatalogItem
+from .forms import ArticleRequestForm, ArticleRequestShowForm, CatalogItemShowForm, ArticleRequestAnswerShowForm
 from authorisation.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.template import loader
@@ -61,7 +61,7 @@ def request_history(request):
         form_1.show(
             order.get_answer()
         )
-        forms.append(form_0.as_table()+form_1.as_table())
+        forms.append(form_0.as_table() + form_1.as_table())
     forms = owr(forms)
     return render(request, 'webapp/html/request_history.html', {'forms': forms})
 
@@ -70,7 +70,7 @@ def request_history(request):
 def catalog(request):
     forms = []
     for catalogObj in CatalogItem.objects.all():
-        form = CatalogCreationForm()
+        form = CatalogItemShowForm()
         form.show(catalogObj)
-        forms.append(form.as_table())
+        forms.append(form)
     return render(request, 'webapp/html/catalog.html', {'forms': forms})

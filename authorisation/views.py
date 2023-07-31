@@ -1,7 +1,7 @@
-from authorisation.models import RegistrationForm, EditForm, LoginForm, PasswordChangeForm
+from .forms import RegistrationForm, EditForm, LoginForm, PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from authorisation.models import UserProfile
+from .models import UserProfile
 from django.contrib.auth.decorators import login_required
 from goldfinger.settings import INVITATION_TOKEN
 

@@ -3,7 +3,7 @@ from .models import ArticleRequestAnswer
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
 
-from .models import ArticleRequest, Order, Factory, JeweleryType, CatalogItem
+from .models import ArticleRequest, Order, Factory, JeweleryType, CatalogItem, CatalogItemImage
 
 
 # Register your models here.
@@ -32,12 +32,18 @@ class JeweleryTypeAdmin(admin.ModelAdmin):
     list_display = ("name",)
 
 
+class CatalogItemImageInline(admin.TabularInline):
+    model = CatalogItemImage
+    extra = 1
+
+
 @admin.register(CatalogItem)
 class CatalogItemAdmin(admin.ModelAdmin):
-    list_display = ("article", "size", "photo")
+    list_display = ("article", "size", "amount")
+    inlines = [CatalogItemImageInline, ]
 
 
-@receiver(pre_delete, sender=CatalogItem)
-def CatalogItem_delete(sender, instance, **kwargs):
+@receiver(pre_delete, sender=CatalogItemImage)
+def CatalogItemImage_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
-    instance.photo.delete(False)
+    instance.image.delete(False)

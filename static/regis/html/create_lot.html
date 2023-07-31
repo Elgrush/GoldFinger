@@ -15,12 +15,20 @@
         </div>
     {% endfor %}
 {% endif %}
-        <summary>Создать лот в каталог</summary>
+        <label>Создать лот в каталог</label>
            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="submit"  value="Отправить запрос">
+
+               {{ formset.management_form }}
+                {% for form in formset %}
+                    {{ form }}
+                {% endfor %}
+
+                <input type="submit"  value="Создать лот">
             </form>
+
+
 
 {% load static %}
 
