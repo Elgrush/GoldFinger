@@ -25,7 +25,16 @@
             <ul>
                 {% if user.is_authenticated %}
 
-                <li><a href="/webapp/">Главная страница</a></li>
+                <li><a href="/webapp/">Каталог</a></li>
+
+                {% endif %}
+
+            </ul>
+            <ul>
+
+                {% if user.is_authenticated %}
+
+                <li><a href="/webapp/">Сделать запрос</a></li>
 
                 {% endif %}
             </ul>

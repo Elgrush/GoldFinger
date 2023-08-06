@@ -78,11 +78,11 @@ class CatalogItem(models.Model):
     size = models.CharField(max_length=32)
     amount = models.IntegerField(null=True, blank=True)
 
-    def images(self):
-        try:
-            return map(len(), CatalogItemImage.objects.filter(CatalogItem=self))
-        except None:
-            return None
+    def get_images(self):
+        return CatalogItemImage.objects.filter(CatalogItem=self)
+
+    def __str__(self):
+        return str(self.id)
 
 
 class CatalogItemImage(models.Model):

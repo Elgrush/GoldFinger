@@ -1,0 +1,26 @@
+img{
+    width: 420px;
+    height: 320px;
+}
+
+.image_box{
+    display: none;
+}
+
+.right_pointer{
+    position: relative;
+    left: 200px;
+    bottom: 180px;
+}
+
+.left_pointer{
+    position: relative;
+    right: 180px;
+    bottom: 180px;
+}
+
+svg{
+    background-color: #cacaca;
+	padding: 6px;
+	border-radius: 100px;
+}

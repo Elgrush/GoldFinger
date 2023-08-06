@@ -43,6 +43,11 @@ class CatalogItemAdmin(admin.ModelAdmin):
     inlines = [CatalogItemImageInline, ]
 
 
+@admin.register(CatalogItemImage)
+class CatalogItemImageAdmin(admin.ModelAdmin):
+    list_display = ("image", "CatalogItem")
+
+
 @receiver(pre_delete, sender=CatalogItemImage)
 def CatalogItemImage_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.

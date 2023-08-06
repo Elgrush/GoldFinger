@@ -66,13 +66,14 @@ def log_out(request):
 
 @login_required
 def account(request):
+    profile = UserProfile.objects.get(user=request.user)
     return render(request, 'authorisation/html/account.html',
                   {
-                      'name': UserProfile.objects.get(user=request.user).name,
-                      'surname': UserProfile.objects.get(user=request.user).surname,
-                      'middle_name': UserProfile.objects.get(user=request.user).middle_name,
-                      'phone': UserProfile.objects.get(user=request.user).telephone_number,
-                      'address': UserProfile.objects.get(user=request.user).address
+                      'name': profile.name,
+                      'surname': profile.surname,
+                      'middle_name': profile.middle_name,
+                      'phone': profile.telephone_number,
+                      'address': profile.address
                   })
 
 

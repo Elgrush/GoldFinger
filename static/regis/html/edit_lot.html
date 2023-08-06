@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<li><a href="/regis/">Вернуться в меню</a></li>
+    {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+        <label>Именить лот в каталоге</label>
+           <form method="POST" enctype="multipart/form-data" id="lot_form">
+                {% csrf_token %}
+                {{ form.as_p }}
+               <div id="image_box">
+                {% with images=form.image_forms %}
+                    {% for image in images %}
+                   <div id="image_box_image">
+                            {{ image.as_div }}
+                       <a>Сменить фото: </a>
+                            <input type="file" accept="image/*">
+                       <div id="delete_checkbox">
+                           <input type="checkbox">
+                            <a>Удалить</a>
+                       </div>
+                   </div>
+                    {% endfor %}
+                {% endwith %}
+               </div>
+               <input type="hidden" name="edit_flag">
+               <input type="submit"  value="Изменить лот" id="submit_form">
+            </form>
+
+
+
+{% load static %}
+<script
+  src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+  crossorigin="anonymous"></script>
+<script src="{% static 'regis/js/add_image_row.js' %}"></script>
+<script src="{% static 'regis/js/delete_images.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'webapp/css/catalog.css' %}">
+{% endblock %}

@@ -16,20 +16,19 @@
     {% endfor %}
 {% endif %}
         <label>Создать лот в каталог</label>
-           <form method="POST" enctype="multipart/form-data">
+           <form method="POST" enctype="multipart/form-data" id="lot_form">
                 {% csrf_token %}
                 {{ form.as_p }}
-
-               {{ formset.management_form }}
-                {% for form in formset %}
-                    {{ form }}
-                {% endfor %}
-
-                <input type="submit"  value="Создать лот">
+               <div id="image_box"></div>
+               <input type="submit"  value="Создать лот">
             </form>
 
 
 
 {% load static %}
-
+<script
+  src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+  crossorigin="anonymous"></script>
+<script src="{% static 'regis/js/add_image_row.js' %}"></script>
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import ArticleRequest, Factory, JeweleryType, CatalogItem
-from .forms import ArticleRequestForm, ArticleRequestShowForm, CatalogItemShowForm, ArticleRequestAnswerShowForm
+from .forms import ArticleRequestForm, ArticleRequestShowForm, CatalogItemForm, ArticleRequestAnswerShowForm, CatalogItemImageForm
 from authorisation.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.template import loader
@@ -12,24 +12,24 @@ from .utils import owr
 # Create your views here.
 
 
-def index(request):
+def make_order(request):
     if not request.user.is_authenticated:
         return redirect('/authorisation/log_in')
     form = ArticleRequestForm(request.POST)
     if form.is_valid():
         form.lock()
-        return render(request, 'webapp/html/confirm.html', {'form': form})
-    return render(request, 'webapp/html/index.html', {'form': form})
+        return render(request, 'webapp/html/confirm_order.html', {'form': form})
+    return render(request, 'webapp/html/make_order.html', {'form': form})
 
 
 @login_required
-def edit_form(request):
+def edit_order(request):
     form = ArticleRequestForm(request.POST)
     return render(request, 'webapp/html/index.html', {'form': form})
 
 
 @login_required
-def confirm(request):
+def confirm_order(request):
     form = ArticleRequestForm(request.POST)
     if request.method == 'POST':
         if form.is_valid():
@@ -67,10 +67,12 @@ def request_history(request):
 
 
 @login_required
-def catalog(request):
+def catalog(request, button=None):
+    if not button:
+        button = 'Добавить в корзину'
     forms = []
     for catalogObj in CatalogItem.objects.all():
-        form = CatalogItemShowForm()
+        form = CatalogItemForm()
         form.show(catalogObj)
         forms.append(form)
-    return render(request, 'webapp/html/catalog.html', {'forms': forms})
+    return render(request, 'webapp/html/catalog.html', {'forms': forms, 'button': button})

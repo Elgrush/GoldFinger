@@ -1,11 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
 {% for form in forms %}
-<form>
+<form method="POST">
     {% csrf_token %}
     {{ form.as_table }}
+    {% with images=form.image_forms %}
+    <div class="show_box">
+        <img src="#" class="image_to_show">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="none" viewBox="0 0 12 16" class="right_pointer" display="none">
+            <path fill="currentColor" d="M7.23 8 3.86 4.64a.9.9 0 0 1 1.28-1.28l4 4a.9.9 0 0 1 0 1.28l-4 4a.9.9 0 0 1-1.28-1.28L7.23 8Z"></path>
+        </svg>
+        <svg fill="none" height="16" viewBox="0 0 12 16" width="12" xmlns="http://www.w3.org/2000/svg" class="left_pointer" display="none">
+            <path d="m4.77 8 3.37 3.36a.9.9 0 1 1-1.28 1.28l-4-4a.9.9 0 0 1 0-1.28l4-4a.9.9 0 1 1 1.28 1.28z" fill="currentColor"></path>
+        </svg>
+    </div>
+    <div class="image_box">
+    {% for image in images %}
+        {{ image }}
+    {% endfor %}
+    {% endwith %}
+    </div>
+    <input type="submit"  value="{{ button }}">
 </form>
 {% endfor %}
 {% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'webapp/css/catalog.css' %}">
+<script
+  src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+  crossorigin="anonymous"></script>
+<script src="{% static 'webapp/js/catalog.js' %}"></script>
 
 {% endblock %}

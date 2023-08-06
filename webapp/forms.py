@@ -1,6 +1,6 @@
 from django import forms
 from .models import ArticleRequestAnswer, CatalogItemImage, CatalogItem, Factory, JeweleryType, ArticleRequest
-from.widgets import PictureWidget
+from .widgets import PictureWidget
 
 
 class ArticleRequestAnswerForm(forms.ModelForm):
@@ -132,7 +132,16 @@ class ArticleRequestShowForm(forms.ModelForm):
 
 
 class CatalogItemImageForm(forms.ModelForm):
-    image = forms.ImageField(label='Фото')
+    CatalogItemImage_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    image = forms.ImageField(label='', widget=PictureWidget, required=False)
+
+    def set_image(self, image=None, model=None):
+        if image:
+            self.fields['image'].initial = image
+        if model:
+            self.fields['image'].initial = model.image
+            self.fields['CatalogItemImage_id'].initial = model.id
+        return self
 
     class Meta:
         model = CatalogItemImage
@@ -140,11 +149,23 @@ class CatalogItemImageForm(forms.ModelForm):
 
 
 class CatalogItemForm(forms.ModelForm):
+    CatalogItem_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+
     class Meta:
         model = CatalogItem
         exclude = []
 
-    image = forms.ImageField(label="Фотография")
+    def get_images(self, model=None):
+        if self.model:
+            self.image_forms = list(
+                    CatalogItemImageForm().set_image(model=image_model) for image_model in self.model.
+                    get_images())
+        if model:
+            self.image_forms = list(
+                CatalogItemImageForm().set_image(model=image_model) for image_model in model.
+                get_images())
+
+    image_forms = None
 
     def __init__(self, *args, **kwargs):
         super(forms.ModelForm, self).__init__(*args, **kwargs)
@@ -152,13 +173,21 @@ class CatalogItemForm(forms.ModelForm):
         self.fields["size"].label = "Размер"
         self.fields["amount"].label = "Количество"
 
+    model = None
+
     def show(self, model=None):
         for field in self.fields:
             self.fields[field].widget.attrs['readonly'] = True
 
         if model:
+            self.model = model
+            self.get_images()
+
             for field in self.fields:
-                self.initial[field] = model.__getattribute__(field)
+                if field == 'CatalogItem_id':
+                    self.initial[field] = model.__getattribute__('id')
+                else:
+                    self.initial[field] = model.__getattribute__(field)
 
             if self.initial["article"]:
                 self.fields["article"].label = "Артикул"
@@ -177,7 +206,3 @@ class CatalogItemForm(forms.ModelForm):
             for field in self.fields:
                 self.fields[field].label = ""
                 self.fields[field].widget.attrs.update({'style': 'display: none'})
-
-
-class CatalogItemShowForm(CatalogItemForm):
-    image = forms.ImageField(widget=PictureWidget)
