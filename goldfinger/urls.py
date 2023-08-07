@@ -26,4 +26,7 @@ urlpatterns = [
     path('accounts/', include('authorisation.urls')),  # Костыль
     path('regis/', include('regis.urls')),
     path("", include("webapp.urls")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static('webapp/', document_root=settings.MEDIA_ROOT)
+] + \
+              static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
+              static('webapp/', document_root=settings.MEDIA_ROOT) + \
+              static('/', document_root=settings.MEDIA_ROOT)

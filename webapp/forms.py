@@ -151,6 +151,17 @@ class CatalogItemImageForm(forms.ModelForm):
 class CatalogItemForm(forms.ModelForm):
     CatalogItem_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
+    size = forms.RegexField(regex=r'^([0-9,.\-/\\]+)+$',
+                            label="Размер изделий:",
+                            error_messages={'invalid': "Неправильный размер."}, required=False)
+    factory = forms.ChoiceField(
+        choices=([('', '----')] + list((i, Factory.objects.all()[i].name) for i in range(len(Factory.objects.all())))),
+        label="Завод изготовитель")
+    type = forms.ChoiceField(
+        choices=([('', '----')] + list(
+            (i, JeweleryType.objects.all()[i].name) for i in range(len(JeweleryType.objects.all())))),
+        label="Тип изделия")
+
     class Meta:
         model = CatalogItem
         exclude = []
@@ -158,8 +169,8 @@ class CatalogItemForm(forms.ModelForm):
     def get_images(self, model=None):
         if self.model:
             self.image_forms = list(
-                    CatalogItemImageForm().set_image(model=image_model) for image_model in self.model.
-                    get_images())
+                CatalogItemImageForm().set_image(model=image_model) for image_model in self.model.
+                get_images())
         if model:
             self.image_forms = list(
                 CatalogItemImageForm().set_image(model=image_model) for image_model in model.
@@ -176,6 +187,9 @@ class CatalogItemForm(forms.ModelForm):
     model = None
 
     def show(self, model=None):
+        self.fields['factory'] = forms.CharField(label="Завод изготовитель")
+        self.fields['type'] = forms.CharField(label="Тип изделия")
+
         for field in self.fields:
             self.fields[field].widget.attrs['readonly'] = True
 
@@ -193,14 +207,23 @@ class CatalogItemForm(forms.ModelForm):
                 self.fields["article"].label = "Артикул"
             else:
                 self.fields["article"].label = ""
+                self.fields["article"].widget.attrs.update({'style': 'display: none'})
             if self.initial["size"]:
                 self.fields["size"].label = "Размер"
             else:
                 self.fields["size"].label = ""
+                self.fields["size"].widget.attrs.update({'style': 'display: none'})
             if self.initial["amount"]:
                 self.fields["amount"].label = "Количество"
             else:
                 self.fields["amount"].label = ""
+                self.fields["amount"].widget.attrs.update({'style': 'display: none'})
+            if not self.initial["factory"]:
+                self.fields["factory"].label = ""
+                self.fields["factory"].widget.attrs.update({'style': 'display: none'})
+            if not self.initial["type"]:
+                self.fields["type"].label = ""
+                self.fields["type"].widget.attrs.update({'style': 'display: none'})
 
         else:
             for field in self.fields:

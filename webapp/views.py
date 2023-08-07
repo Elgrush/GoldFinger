@@ -67,12 +67,14 @@ def request_history(request):
 
 
 @login_required
-def catalog(request, button=None):
+def catalog(request, button=None, action=None):
     if not button:
         button = 'Добавить в корзину'
+    if not action:
+        action = 'button'
     forms = []
     for catalogObj in CatalogItem.objects.all():
         form = CatalogItemForm()
         form.show(catalogObj)
         forms.append(form)
-    return render(request, 'webapp/html/catalog.html', {'forms': forms, 'button': button})
+    return render(request, 'webapp/html/catalog.html', {'forms': forms, 'button': button, 'action': action})

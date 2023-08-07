@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from webapp.models import ArticleRequest, Factory, ArticleRequestAnswer, CatalogItem, CatalogItemImage
+from webapp.models import ArticleRequest, Factory, ArticleRequestAnswer, CatalogItem, CatalogItemImage, JeweleryType
 from webapp.forms import ArticleRequestShowForm, ArticleRequestAnswerForm, ArticleRequestAnswerShowForm, CatalogItemForm
 from django.forms import modelformset_factory
 from django.db.utils import IntegrityError
@@ -42,13 +42,17 @@ def create_lot(request):
     if request.user.is_superuser:
         if request.method == "POST":
             form = CatalogItemForm(request.POST, request.FILES)
-            if form.is_valid():
-                new_lot = form.save()
-                for image in request.FILES:
-                    image = request.FILES[image]
-                    CatalogItemImage(CatalogItem=new_lot, image=image).save()
-            else:
-                return render(request, 'regis/html/create_lot.html', {'form': form})
+            new_lot = CatalogItem(
+                article=form.data['article'],
+                size=form.data['size'],
+                amount=form.data['amount'],
+                factory=Factory.objects.all()[int(form.data['factory'])],
+                type=JeweleryType.objects.all()[int(form.data['type'])]
+            )
+            new_lot.save()
+            for image in request.FILES:
+                image = request.FILES[image]
+                CatalogItemImage(CatalogItem=new_lot, image=image).save()
         form = CatalogItemForm
         return render(request, 'regis/html/create_lot.html', {'form': form})
 
@@ -66,7 +70,7 @@ def edit_lot(request):
                 try:
                     lot = CatalogItem.objects.get(id=form.data['CatalogItem_id'])
                 except CatalogItem.DoesNotExist:
-                    return catalog(request, 'Изменить')
+                    return catalog(request, 'Изменить лот', 'submit')
                 for field in lot._meta.get_fields():
                     if field.name not in ['images', 'id']:
                         setattr(lot, field.name, request.POST[field.name])
@@ -79,7 +83,7 @@ def edit_lot(request):
                         CatalogItemImage(CatalogItem=lot, image=image).save()
             form.get_images(CatalogItem.objects.get(id=request.POST['CatalogItem_id']))
             return render(request, 'regis/html/edit_lot.html', {'form': form})
-        return catalog(request, 'Изменить')
+        return catalog(request, 'Изменить лот', 'submit')
 
 
 def delete_image(request):

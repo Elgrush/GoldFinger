@@ -21,12 +21,18 @@ class JeweleryType(models.Model):
     def __str__(self):
         return self.name
 
+    def self(self):
+        return self
+
 
 class Factory(models.Model):
     name = models.CharField(max_length=150)
 
     def __str__(self):
         return self.name
+
+    def self(self):
+        return self
 
 
 class ArticleRequest(models.Model):
@@ -77,6 +83,16 @@ class CatalogItem(models.Model):
     article = models.CharField(max_length=32)
     size = models.CharField(max_length=32)
     amount = models.IntegerField(null=True, blank=True)
+    factory = models.ForeignKey(
+        Factory,
+        on_delete=models.CASCADE
+    )
+    type = models.ForeignKey(
+        JeweleryType,
+        on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def get_images(self):
         return CatalogItemImage.objects.filter(CatalogItem=self)

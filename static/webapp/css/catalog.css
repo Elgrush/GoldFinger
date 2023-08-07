@@ -1,26 +1,34 @@
-img{
+img {
     width: 420px;
     height: 320px;
 }
 
-.image_box{
+.image_box {
     display: none;
 }
 
-.right_pointer{
+.right_pointer {
     position: relative;
     left: 200px;
     bottom: 180px;
 }
 
-.left_pointer{
+.left_pointer {
     position: relative;
     right: 180px;
     bottom: 180px;
 }
 
-svg{
+svg {
     background-color: #cacaca;
 	padding: 6px;
 	border-radius: 100px;
+}
+
+#hoover_hide {
+    display: none;
+}
+
+main {
+    display: flex;
 }
