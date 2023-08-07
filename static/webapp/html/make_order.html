@@ -6,7 +6,7 @@
     <details>
         <summary>Сделать заказ по артикулу</summary>
           <div class="orderbox">
-           <form action="{% url 'index' %}" method="POST">
+           <form action="{% url 'make_order' %}" method="POST">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <input type="submit"  value="Отправить запрос">
