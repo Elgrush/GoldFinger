@@ -2,6 +2,9 @@ form {
   max-width: 400px;
   margin: 0 auto;
   padding-bottom: 50px;
+  display: flex;
+  flex-direction:column;
+  width: 50%;
 }
 
 details{
@@ -56,7 +59,9 @@ summary:focus {
   flex-direction: column;
 }
 input{
-  border-radius: 6px;
+    text-align: center;
+    text-shadow: 0 0 black;
+    width: 100%;
 }
 button{
   margin-top: 30px;
@@ -66,6 +71,8 @@ button{
 .main_menu{
     position: fixed;
     bottom: 0;
+    width: 100%;
+    display: flex;
 }
 
 .errorlist {
@@ -129,4 +136,15 @@ tr {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+.bottom_nav {
+    display: flex;
+    width: 100%;
+}
+
+.bottom_menu {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
 }

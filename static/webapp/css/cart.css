@@ -1,0 +1,16 @@
+.confirm_button {
+    width: 300px;
+    height: 150px;
+    background-color: green;
+}
+#id_purchase_amount {
+    width: 50%;
+}
+
+.discard_item {
+    height: 10%;
+    width: 50%;
+    align-self: center;
+    margin-top: 10px;
+    background-color: #ff7676;
+}

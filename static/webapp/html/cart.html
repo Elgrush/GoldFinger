@@ -21,17 +21,28 @@
     {% endfor %}
     {% endwith %}
     </div>
-    <input type="{{action}}"  value="{{ button }}">
+    <div class="amount_tools">
+        <label for="id_purchase_amount">Количество заказаных изделий</label>
+        <input id="id_purchase_amount" type="number" name="purchase_amount" readonly value="{{ form.amount_bought }}">
+    </div>
+    <input type="button"  value="Убрать из корзины" class="discard_item">
 </form>
 {% endfor %}
 </div>
+
+<input class="confirm_button" type="submit"  value="Подтвердить заказ">
+
 {% load static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'webapp/css/catalog.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'webapp/css/cart.css' %}">
+
 <script
   src="https://code.jquery.com/jquery-3.7.0.min.js"
   integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
   crossorigin="anonymous"></script>
+
 <script src="{% static 'webapp/js/catalog.js' %}"></script>
+<script src="{% static 'webapp/js/cart.js' %}"></script>
 
 {% endblock %}

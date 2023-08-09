@@ -1,17 +1,16 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import ArticleRequest, Factory, JeweleryType, CatalogItem
-from .forms import ArticleRequestForm, ArticleRequestShowForm, CatalogItemForm, ArticleRequestAnswerShowForm, CatalogItemImageForm
-from authorisation.models import UserProfile
+from .forms import ArticleRequestForm, ArticleRequestShowForm, CatalogItemForm, ArticleRequestAnswerShowForm, \
+    CatalogItemImageForm
+from authorisation.models import UserProfile, ShoppingCartOrder
 from django.contrib.auth.decorators import login_required
 from django.template import loader
 from goldfinger.settings import HOST_URL, STATIC_URL
 from .utils import owr
 
 
-# Create your views here.
-
-
+@login_required
 def make_order(request):
     if not request.user.is_authenticated:
         return redirect('/authorisation/log_in')
@@ -78,3 +77,29 @@ def catalog(request, button=None, action=None):
         form.show(catalogObj)
         forms.append(form)
     return render(request, 'webapp/html/catalog.html', {'forms': forms, 'button': button, 'action': action})
+
+
+@login_required
+def add_item_to_cart(request):
+    ShoppingCartOrder(profile=UserProfile.objects.get(user=request.user), CatalogItem=CatalogItem.objects.get(
+        id=request.POST['id']), amount=0).save()
+
+
+@login_required
+def shopping_cart(request):
+    forms = []
+    for CartItem in UserProfile.objects.get(user=request.user).get_cart():
+        form = CatalogItemForm()
+        form.show(CartItem.CatalogItem)
+        form.amount_bought = CartItem.amount
+        forms.append(form)
+    return render(request, 'webapp/html/cart.html', {'forms': forms})
+
+
+@login_required
+def discard_item_from_card(request):
+    ShoppingCartOrder.objects.get(profile=UserProfile.objects.get(user=request.user), CatalogItem=CatalogItem.objects.get(
+        id=request.POST['id'])).delete()
+
+def set_cart_amount(request):
+    pass

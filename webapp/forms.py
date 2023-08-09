@@ -149,6 +149,7 @@ class CatalogItemImageForm(forms.ModelForm):
 
 
 class CatalogItemForm(forms.ModelForm):
+    field_order = ["factory", "article", "type", "size", "amount", "price"]
     CatalogItem_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
     size = forms.RegexField(regex=r'^([0-9,.\-/\\]+)+$',
@@ -186,6 +187,8 @@ class CatalogItemForm(forms.ModelForm):
 
     model = None
 
+    amount_bought = None
+
     def show(self, model=None):
         self.fields['factory'] = forms.CharField(label="Завод изготовитель")
         self.fields['type'] = forms.CharField(label="Тип изделия")
@@ -213,6 +216,11 @@ class CatalogItemForm(forms.ModelForm):
             else:
                 self.fields["size"].label = ""
                 self.fields["size"].widget.attrs.update({'style': 'display: none'})
+            if self.initial["price"]:
+                self.fields["price"].label = "Цена"
+            else:
+                self.fields["price"].label = ""
+                self.fields["price"].widget.attrs.update({'style': 'display: none'})
             if self.initial["amount"]:
                 self.fields["amount"].label = "Количество"
             else:

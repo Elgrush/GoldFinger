@@ -29,6 +29,15 @@ svg {
     display: none;
 }
 
-main {
-    display: flex;
+.main {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+label {
+    width: 100%;
+}
+
+input {
+ background: #ffdb99;
 }

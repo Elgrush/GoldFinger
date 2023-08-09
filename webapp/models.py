@@ -83,6 +83,7 @@ class CatalogItem(models.Model):
     article = models.CharField(max_length=32)
     size = models.CharField(max_length=32)
     amount = models.IntegerField(null=True, blank=True)
+    price = models.CharField(max_length=64)
     factory = models.ForeignKey(
         Factory,
         on_delete=models.CASCADE
@@ -102,6 +103,7 @@ class CatalogItem(models.Model):
 
 
 class CatalogItemImage(models.Model):
-    CatalogItem = models.ForeignKey(CatalogItem, related_name='images', on_delete=
-    models.CASCADE)
+    CatalogItem = models.ForeignKey(CatalogItem, related_name='images',
+                                    on_delete=models.CASCADE
+                                    )
     image = models.ImageField(upload_to="images")
