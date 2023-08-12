@@ -41,3 +41,9 @@ label {
 input {
  background: #ffdb99;
 }
+
+.add_button {
+    width: 50%;
+    align-self: center;
+    background: darkseagreen;
+}

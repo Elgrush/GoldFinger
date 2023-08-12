@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<a href="/webapp/catalog/" id="back_to_catalog_id">Вернуться в каталог</a>
+
 <div class="main">
 {% for form in forms %}
 <form method="POST">
@@ -30,11 +33,14 @@
 {% endfor %}
 </div>
 
+{% if forms %}
 <input class="confirm_button" type="submit"  value="Подтвердить заказ">
+{% else %}
+<p>Корзина пуста</p>
+{% endif %}
 
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'webapp/css/catalog.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'webapp/css/cart.css' %}">
 
 <script
@@ -42,7 +48,9 @@
   integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
   crossorigin="anonymous"></script>
 
-<script src="{% static 'webapp/js/catalog.js' %}"></script>
-<script src="{% static 'webapp/js/cart.js' %}"></script>
+<script src="{% static 'webapp/js/image_boxes.js' %}"></script>
+<script src="{% static 'webapp/js/remove_from_cart.js' %}"></script>
+<script src="{% static 'webapp/js/update_ordered_amount.js' %}"></script>
+<script src="{% static 'webapp/js/limit_integer_fields.js' %}"></script>
 
 {% endblock %}

@@ -5,6 +5,7 @@ from .forms import ArticleRequestForm, ArticleRequestShowForm, CatalogItemForm, 
     CatalogItemImageForm
 from authorisation.models import UserProfile, ShoppingCartOrder
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.template import loader
 from goldfinger.settings import HOST_URL, STATIC_URL
 from .utils import owr
@@ -81,8 +82,25 @@ def catalog(request, button=None, action=None):
 
 @login_required
 def add_item_to_cart(request):
-    ShoppingCartOrder(profile=UserProfile.objects.get(user=request.user), CatalogItem=CatalogItem.objects.get(
-        id=request.POST['id']), amount=0).save()
+    try:
+        ShoppingCartOrder.objects.get(UserProfile=UserProfile.objects.get(user=request.user),
+                                      CatalogItem=CatalogItem.objects.get(
+                                          id=request.POST['id']))
+        response = HttpResponse(headers={"success": 0})
+        return response
+    except ObjectDoesNotExist:
+        if 'amount' in request.POST.keys():
+            amount = int(request.POST['amount'])
+            lot = CatalogItem.objects.get(id=request.POST['id'])
+            if amount > lot.amount or amount > 0:
+                amount = lot.amount
+            ShoppingCartOrder(UserProfile=UserProfile.objects.get(user=request.user),
+                              CatalogItem=lot, amount=amount).save()
+        else:
+            ShoppingCartOrder(UserProfile=UserProfile.objects.get(user=request.user), CatalogItem=CatalogItem.objects.get(
+                id=request.POST['id']), amount=0).save()
+        response = HttpResponse(headers={"success": 1})
+        return response
 
 
 @login_required
@@ -97,9 +115,29 @@ def shopping_cart(request):
 
 
 @login_required
-def discard_item_from_card(request):
-    ShoppingCartOrder.objects.get(profile=UserProfile.objects.get(user=request.user), CatalogItem=CatalogItem.objects.get(
-        id=request.POST['id'])).delete()
+def discard_item_from_cart(request):
+    try:
+        ShoppingCartOrder.objects.get(UserProfile=UserProfile.objects.get(user=request.user), CatalogItem=CatalogItem.
+                                      objects.get(id=request.POST['id'])).delete()
+        response = HttpResponse(headers={"success": 1})
+        return response
+    except ObjectDoesNotExist:
+        response = HttpResponse(headers={"success": 0})
+        return response
+
 
 def set_cart_amount(request):
-    pass
+    try:
+        order = ShoppingCartOrder.objects.get(UserProfile=UserProfile.objects.get(user=request.user),
+                                              CatalogItem=CatalogItem.objects.get(
+                                                  id=request.POST['id']))
+        amount = int(request.POST['amount'])
+        if amount > order.CatalogItem.amount or amount > 0:
+            amount = order.CatalogItem.amount
+        order.amount = amount
+        order.save()
+        response = HttpResponse(headers={"success": 1})
+        return response
+    except ObjectDoesNotExist:
+        response = HttpResponse(headers={"success": 0})
+        return response

@@ -1,3 +1,52 @@
+img {
+    width: 420px;
+    height: 320px;
+}
+
+.image_box {
+    display: none;
+}
+
+.right_pointer {
+    position: relative;
+    left: 200px;
+    bottom: 180px;
+}
+
+.left_pointer {
+    position: relative;
+    right: 180px;
+    bottom: 180px;
+}
+
+svg {
+    background-color: #cacaca;
+	padding: 6px;
+	border-radius: 100px;
+}
+
+#hoover_hide {
+    display: none;
+}
+
+.main {
+    display: block;
+}
+
+label {
+    width: 100%;
+}
+
+input {
+ background: #ffdb99;
+}
+
+.add_button {
+    width: 50%;
+    align-self: center;
+    background: darkseagreen;
+}
+
 .confirm_button {
     width: 300px;
     height: 150px;
