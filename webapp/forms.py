@@ -201,6 +201,7 @@ class CatalogItemForm(forms.ModelForm):
             self.get_images()
 
             for field in self.fields:
+                self.fields[field].widget.attrs['class'] = field + '_class'
                 if field == 'CatalogItem_id':
                     self.initial[field] = model.__getattribute__('id')
                 else:

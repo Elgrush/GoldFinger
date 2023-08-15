@@ -5,7 +5,7 @@ from .forms import ArticleRequestForm, ArticleRequestShowForm, CatalogItemForm, 
     CatalogItemImageForm
 from authorisation.models import UserProfile, ShoppingCartOrder
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.template import loader
 from goldfinger.settings import HOST_URL, STATIC_URL
 from .utils import owr
@@ -101,6 +101,9 @@ def add_item_to_cart(request):
                 id=request.POST['id']), amount=0).save()
         response = HttpResponse(headers={"success": 1})
         return response
+    except MultipleObjectsReturned:
+        response = HttpResponse(headers={"success": 1})
+        return response
 
 
 @login_required
@@ -123,6 +126,11 @@ def discard_item_from_cart(request):
         return response
     except ObjectDoesNotExist:
         response = HttpResponse(headers={"success": 0})
+        return response
+    except MultipleObjectsReturned:
+        ShoppingCartOrder.objects.filter(UserProfile=UserProfile.objects.get(user=request.user), CatalogItem=CatalogItem.
+                                      objects.get(id=request.POST['id'])).delete()
+        response = HttpResponse(headers={"success": 1})
         return response
 
 

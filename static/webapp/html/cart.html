@@ -26,7 +26,7 @@
     </div>
     <div class="amount_tools">
         <label for="id_purchase_amount">Количество заказаных изделий</label>
-        <input id="id_purchase_amount" type="number" name="purchase_amount" readonly value="{{ form.amount_bought }}">
+        <input id="id_purchase_amount" type="number" name="purchase_amount" class="purchase_amount_class" readonly value="{{ form.amount_bought }}">
     </div>
     <input type="button"  value="Убрать из корзины" class="discard_item">
 </form>
@@ -34,7 +34,12 @@
 </div>
 
 {% if forms %}
-<input class="confirm_button" type="submit"  value="Подтвердить заказ">
+<div class="post_block">
+    <label for="id_final_price">Итоговая цена без учёта доставки</label>
+    <input id="id_final_price" type="number" name="final_price" readonly value>
+
+    <input class="confirm_button" type="submit"  value="Подтвердить заказ">
+</div>
 {% else %}
 <p>Корзина пуста</p>
 {% endif %}
@@ -49,8 +54,8 @@
   crossorigin="anonymous"></script>
 
 <script src="{% static 'webapp/js/image_boxes.js' %}"></script>
+<script src="{% static 'webapp/js/calculate_costs&limit_integer_fields.js' %}"></script>
 <script src="{% static 'webapp/js/remove_from_cart.js' %}"></script>
 <script src="{% static 'webapp/js/update_ordered_amount.js' %}"></script>
-<script src="{% static 'webapp/js/limit_integer_fields.js' %}"></script>
 
 {% endblock %}

@@ -63,3 +63,12 @@ input {
     margin-top: 10px;
     background-color: #ff7676;
 }
+
+#id_final_price{
+    margin-bottom: 20px;
+}
+
+.post_block{
+    display: inline-grid;
+    max-width: 400px;
+}
