@@ -1,5 +1,4 @@
 form {
-  max-width: 400px;
   margin: 0 auto;
   padding-bottom: 50px;
   display: flex;
@@ -82,6 +81,7 @@ button{
 body{
   background: #ffdb99;
   text-align: center;
+  min-width: 600px;
 }
 
 input[type="text"],
@@ -147,4 +147,8 @@ tr {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
+}
+
+.bottom_filler{
+    height: 50px;
 }

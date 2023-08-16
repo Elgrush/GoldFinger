@@ -81,7 +81,7 @@ class ArticleRequestAnswer(models.Model):
 
 class CatalogItem(models.Model):
     article = models.CharField(max_length=32)
-    size = models.CharField(max_length=32)
+    size = models.CharField(max_length=32, null=True, blank=True)
     amount = models.IntegerField(null=True, blank=True)
     price = models.CharField(max_length=64)
     factory = models.ForeignKey(

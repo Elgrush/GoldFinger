@@ -27,6 +27,8 @@
     <div class="amount_tools">
         <label for="id_purchase_amount">Количество заказаных изделий</label>
         <input id="id_purchase_amount" type="number" name="purchase_amount" class="purchase_amount_class" readonly value="{{ form.amount_bought }}">
+        <div class="plus"></div>
+        <div class="minus"></div>
     </div>
     <input type="button"  value="Убрать из корзины" class="discard_item">
 </form>
@@ -57,5 +59,6 @@
 <script src="{% static 'webapp/js/calculate_costs&limit_integer_fields.js' %}"></script>
 <script src="{% static 'webapp/js/remove_from_cart.js' %}"></script>
 <script src="{% static 'webapp/js/update_ordered_amount.js' %}"></script>
+<script src="{% static 'webapp/js/plus_buttons_configurator.js' %}"></script>
 
 {% endblock %}
