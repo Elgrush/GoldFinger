@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from webapp.models import ArticleRequest, Factory, ArticleRequestAnswer, CatalogItem, CatalogItemImage, JeweleryType
-from webapp.forms import ArticleRequestShowForm, ArticleRequestAnswerForm, ArticleRequestAnswerShowForm, CatalogItemForm
+from webapp.forms import ArticleRequestShowForm, ArticleRequestAnswerForm, CatalogItemForm
 from django.forms import modelformset_factory
 from django.db.utils import IntegrityError
 from webapp.utils import owr
@@ -17,7 +17,7 @@ def menu(request):
                 form_0.Meta.model = order
                 form_0.show(order)
                 form_0.hide_user()
-                form_1 = ArticleRequestAnswerShowForm()
+                form_1 = ArticleRequestAnswerForm()
                 form_1.show(
                     order.get_answer()
                 )
@@ -27,7 +27,7 @@ def menu(request):
         if request.method == "POST":
             answer = ArticleRequestAnswer(
                 request=ArticleRequest.objects.get(id=request.POST["ArticleRequestId"]),
-                amount=request.POST.get('amount')
+                amount=request.POST.get('amount'), price=request.POST.get('price')
             )
             try:
                 answer.save()

@@ -63,6 +63,13 @@ input {
     background-color: #ff7676;
 }
 
+.discard_request {
+    height: 10%;
+    width: 50%;
+    align-self: center;
+    background-color: #ff7676;
+}
+
 #id_final_price{
     margin-bottom: 20px;
 }
@@ -113,4 +120,10 @@ input {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
+}
+
+.show_box{
+    width: 420px;
+    height: 320px;
+    align-self: center;
 }

@@ -4,38 +4,57 @@
 <a href="/webapp/catalog/" id="back_to_catalog_id">Вернуться в каталог</a>
 
 <div class="main">
-{% for form in forms %}
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_table }}
-    {% with images=form.image_forms %}
-    <div class="show_box">
-        <img src="#" class="image_to_show">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="none" viewBox="0 0 12 16" class="right_pointer" id="hoover_hide" display="none" >
-            <path fill="currentColor" d="M7.23 8 3.86 4.64a.9.9 0 0 1 1.28-1.28l4 4a.9.9 0 0 1 0 1.28l-4 4a.9.9 0 0 1-1.28-1.28L7.23 8Z"></path>
-        </svg>
-        <svg fill="none" height="16" viewBox="0 0 12 16" width="12" xmlns="http://www.w3.org/2000/svg" class="left_pointer" id="hoover_hide" display="none">
-            <path d="m4.77 8 3.37 3.36a.9.9 0 1 1-1.28 1.28l-4-4a.9.9 0 0 1 0-1.28l4-4a.9.9 0 1 1 1.28 1.28z" fill="currentColor"></path>
-        </svg>
-    </div>
-    <div class="image_box">
-    {% for image in images %}
-        {{ image }}
+    {% if lot_forms or request_forms %}
+    <p> Товары из каталога </p>
+    {% endif %}
+    {% for form in lot_forms %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_table }}
+        {% with images=form.image_forms %}
+        <div class="show_box">
+            <img src="#" class="image_to_show">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="none" viewBox="0 0 12 16" class="right_pointer" id="hoover_hide" display="none" >
+                <path fill="currentColor" d="M7.23 8 3.86 4.64a.9.9 0 0 1 1.28-1.28l4 4a.9.9 0 0 1 0 1.28l-4 4a.9.9 0 0 1-1.28-1.28L7.23 8Z"></path>
+            </svg>
+            <svg fill="none" height="16" viewBox="0 0 12 16" width="12" xmlns="http://www.w3.org/2000/svg" class="left_pointer" id="hoover_hide" display="none">
+                <path d="m4.77 8 3.37 3.36a.9.9 0 1 1-1.28 1.28l-4-4a.9.9 0 0 1 0-1.28l4-4a.9.9 0 1 1 1.28 1.28z" fill="currentColor"></path>
+            </svg>
+        </div>
+        <div class="image_box">
+        {% for image in images %}
+            {{ image }}
+        {% endfor %}
+        {% endwith %}
+        </div>
+        <div class="amount_tools">
+            <label for="id_purchase_amount">Количество заказаных изделий</label>
+            <input id="id_purchase_amount" type="number" name="purchase_amount" class="purchase_amount_class" readonly value="{{ form.amount_bought }}">
+            <div class="plus"></div>
+            <div class="minus"></div>
+        </div>
+        <input type="button"  value="Убрать из корзины" class="discard_item">
+    </form>
     {% endfor %}
-    {% endwith %}
-    </div>
-    <div class="amount_tools">
-        <label for="id_purchase_amount">Количество заказаных изделий</label>
-        <input id="id_purchase_amount" type="number" name="purchase_amount" class="purchase_amount_class" readonly value="{{ form.amount_bought }}">
-        <div class="plus"></div>
-        <div class="minus"></div>
-    </div>
-    <input type="button"  value="Убрать из корзины" class="discard_item">
-</form>
-{% endfor %}
+    {% if lot_forms or request_forms %}
+    <p> Товары Ваших запросов </p>
+    {% endif %}
+    {% for form in request_forms %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <div class="amount_tools">
+            <label for="id_purchase_amount">Количество заказаных изделий</label>
+            <input id="id_purchase_amount" type="number" name="purchase_amount" class="purchase_amount_class" readonly value="{{ form.amount_bought }}">
+            <div class="plus"></div>
+            <div class="minus"></div>
+        </div>
+        <input type="button"  value="Убрать из корзины" class="discard_request">
+    </form>
+    {% endfor %}
 </div>
 
-{% if forms %}
+{% if lot_forms or request_forms %}
 <div class="post_block">
     <label for="id_final_price">Итоговая цена без учёта доставки</label>
     <input id="id_final_price" type="number" name="final_price" readonly value>
@@ -57,7 +76,8 @@
 
 <script src="{% static 'webapp/js/image_boxes.js' %}"></script>
 <script src="{% static 'webapp/js/calculate_costs&limit_integer_fields.js' %}"></script>
-<script src="{% static 'webapp/js/remove_from_cart.js' %}"></script>
+<script src="{% static 'webapp/js/remove_lots_from_cart.js' %}"></script>
+<script src="{% static 'webapp/js/remove_requests_from_cart.js' %}"></script>
 <script src="{% static 'webapp/js/update_ordered_amount.js' %}"></script>
 <script src="{% static 'webapp/js/plus_buttons_configurator.js' %}"></script>
 

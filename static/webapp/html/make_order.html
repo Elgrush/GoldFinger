@@ -5,7 +5,7 @@
     {% endif %}
     <details>
         <summary>Сделать заказ по артикулу</summary>
-          <div class="orderbox">
+          <div class="order_box">
            <form action="{% url 'make_order' %}" method="POST">
                 {% csrf_token %}
                 {{ form.as_p }}

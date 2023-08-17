@@ -13,7 +13,9 @@ urlpatterns = [
     path("catalog/", views.catalog, name="catalog"),
     path("shopping_cart/", views.shopping_cart, name="shopping_cart"),
     path("discard_item_from_cart/", views.discard_item_from_cart, name="discard_item_from_cart"),
+    path("discard_request_from_cart/", views.discard_request_from_cart, name="discard_request_from_cart"),
     path("add_item_to_cart/", views.add_item_to_cart, name="add_item_to_cart"),
+    path("add_request_to_cart/", views.add_request_to_cart, name="add_request_to_cart"),
     path("set_cart_amount/", views.set_cart_amount, name="set_cart_amount"),
     path("", views.catalog, name="catalog"),
 ] + static('catalog/', document_root=settings.MEDIA_ROOT) + static('shopping_cart/', document_root=settings.MEDIA_ROOT)

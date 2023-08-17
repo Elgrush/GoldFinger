@@ -6,7 +6,18 @@
 {% endif %}
 {% for form in forms %}
     <form>
+        {% csrf_token %}
         {{ form }}
+        <input type="button"  value="Добавить в корзину" class="add_button">
     </form>
 {% endfor %}
+{% load static %}
+
+<script
+  src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+  crossorigin="anonymous"></script>
+<script src="{% static 'webapp/js/add_request_to_cart.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'webapp/css/request_history.css' %}">
+
 {% endblock %}

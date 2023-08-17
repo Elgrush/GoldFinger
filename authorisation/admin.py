@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import UserProfile, PickupAddress, ShoppingCartOrder
+from .models import UserProfile, PickupAddress, ShoppingCartOrder, ShoppingCartRequest
 
 
 class ShoppingCartOrderInline(admin.TabularInline):
@@ -8,10 +8,15 @@ class ShoppingCartOrderInline(admin.TabularInline):
     extra = 1
 
 
+class ShoppingCartRequestInline(admin.TabularInline):
+    model = ShoppingCartRequest
+    extra = 1
+
+
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ("user", "name", "surname", "middle_name", "telephone_number")
-    inlines = [ShoppingCartOrderInline, ]
+    inlines = [ShoppingCartOrderInline, ShoppingCartRequestInline]
 
 
 @admin.register(PickupAddress)

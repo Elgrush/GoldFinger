@@ -42,7 +42,7 @@ class ArticleRequest(models.Model):
 
     )
     article = models.CharField(max_length=32)
-    size = models.CharField(max_length=32)
+    size = models.CharField(max_length=32, null=True, blank=True)
     amount = models.IntegerField(null=True, blank=True)
     factory = models.ForeignKey(
         Factory,
@@ -72,6 +72,7 @@ class ArticleRequest(models.Model):
 
 class ArticleRequestAnswer(models.Model):
     amount = models.IntegerField()
+    price = models.CharField(max_length=64)
     created_at = models.DateTimeField(auto_now_add=True)
     request = models.OneToOneField(
         ArticleRequest,

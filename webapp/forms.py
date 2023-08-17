@@ -4,40 +4,31 @@ from .widgets import PictureWidget
 
 
 class ArticleRequestAnswerForm(forms.ModelForm):
-    ArticleRequestId = forms.IntegerField(widget=forms.TextInput(attrs={'style': 'display: none'}), label="")
-
-    class Meta:
-        model = ArticleRequestAnswer
-        fields = ["amount"]
-
-    def __init__(self, *args, **kwargs):
-        super(ArticleRequestAnswerForm, self).__init__(*args, **kwargs)
-        self.fields['amount'].label = "Количество:"
-
-
-class ArticleRequestAnswerShowForm(forms.ModelForm):
     ArticleRequestAnswerId = forms.IntegerField(widget=forms.TextInput(attrs={'style': 'display: none'}), label="")
 
     class Meta:
         model = ArticleRequestAnswer
-        fields = ["amount"]
-
-    def __init__(self, *args, **kwargs):
-        super(ArticleRequestAnswerShowForm, self).__init__(*args, **kwargs)
-        self.fields['amount'].label = "В наличии:"
-        self.fields['amount'].widget.attrs['class'] = 'answer-amount'
+        fields = ["amount", "price"]
 
     def show(self, model=None):
+        self.fields['price'].label = "Цена:"
+        self.fields['price'].widget.attrs['class'] = 'answer_price'
+        self.fields['amount'].label = "В наличии:"
+        self.fields['amount'].widget.attrs['class'] = 'answer_amount'
+
         for field in self.fields:
             self.fields[field].widget.attrs['readonly'] = True
 
         if model:
             self.initial['amount'] = model.amount
+            self.initial['price'] = model.price
             self.initial['ArticleRequestAnswerId'] = model.id
 
         else:
             self.fields['amount'].label = ""
             self.fields['amount'].widget.attrs.update({'style': 'display: none'})
+            self.fields['price'].label = ""
+            self.fields['price'].widget.attrs.update({'style': 'display: none'})
 
 
 class ArticleRequestForm(forms.Form):
@@ -79,6 +70,7 @@ class ArticleRequestShowForm(forms.ModelForm):
     ArticleRequestId = forms.IntegerField(widget=forms.TextInput(attrs={'style': 'display: none'}), label="")
     factory = forms.CharField()
     type = forms.CharField()
+    id = forms.IntegerField(widget=forms.HiddenInput, label="", required=False)
 
     class Meta:
         model = ArticleRequest
@@ -100,6 +92,7 @@ class ArticleRequestShowForm(forms.ModelForm):
 
     def show(self, model=None):
         if model:
+            self.initial['id'] = model.id
             self.initial['user'] = model.user
             self.initial['article'] = model.article
             self.initial['size'] = model.size
@@ -198,14 +191,21 @@ class CatalogItemForm(forms.ModelForm):
 
         if model:
             self.model = model
-            self.get_images()
+
+            try:
+                self.get_images()
+            except AttributeError:
+                pass
 
             for field in self.fields:
                 self.fields[field].widget.attrs['class'] = field + '_class'
                 if field == 'CatalogItem_id':
                     self.initial[field] = model.__getattribute__('id')
                 else:
-                    self.initial[field] = model.__getattribute__(field)
+                    try:
+                        self.initial[field] = model.__getattribute__(field)
+                    except AttributeError:
+                        pass
 
             if self.initial["article"]:
                 self.fields["article"].label = "Артикул"
@@ -217,11 +217,14 @@ class CatalogItemForm(forms.ModelForm):
             else:
                 self.fields["size"].label = ""
                 self.fields["size"].widget.attrs.update({'style': 'display: none'})
-            if self.initial["price"]:
+            try:
+                if self.initial["price"]:
+                    self.fields["price"].label = "Цена"
+                else:
+                    self.fields["price"].label = ""
+                    self.fields["price"].widget.attrs.update({'style': 'display: none'})
+            except KeyError:
                 self.fields["price"].label = "Цена"
-            else:
-                self.fields["price"].label = ""
-                self.fields["price"].widget.attrs.update({'style': 'display: none'})
             if self.initial["amount"]:
                 self.fields["amount"].label = "Количество"
             else:

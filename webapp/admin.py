@@ -7,9 +7,15 @@ from .models import ArticleRequest, Order, Factory, JeweleryType, CatalogItem, C
 
 
 # Register your models here.
+class ArticleRequestAnswerInline(admin.TabularInline):
+    model = ArticleRequestAnswer
+    extra = 1
+
+
 @admin.register(ArticleRequest)
 class ArticleRequestAdmin(admin.ModelAdmin):
     list_display = ("user", "article", "type", "size", "amount", "factory", "created_at", "updated_at")
+    inlines = [ArticleRequestAnswerInline, ]
 
 
 @admin.register(Order)
@@ -20,11 +26,6 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(Factory)
 class FactoryAdmin(admin.ModelAdmin):
     list_display = ("name",)
-
-
-@admin.register(ArticleRequestAnswer)
-class ArticleRequestAnswerAdmin(admin.ModelAdmin):
-    list_display = ("request", "amount", "created_at")
 
 
 @admin.register(JeweleryType)

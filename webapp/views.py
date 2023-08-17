@@ -1,9 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import ArticleRequest, Factory, JeweleryType, CatalogItem
-from .forms import ArticleRequestForm, ArticleRequestShowForm, CatalogItemForm, ArticleRequestAnswerShowForm, \
-    CatalogItemImageForm
-from authorisation.models import UserProfile, ShoppingCartOrder
+from .models import ArticleRequest, Factory, JeweleryType, CatalogItem, ArticleRequestAnswer
+from .forms import ArticleRequestForm, ArticleRequestShowForm, CatalogItemForm, ArticleRequestAnswerForm
+from authorisation.models import UserProfile, ShoppingCartOrder, ShoppingCartRequest
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.template import loader
@@ -57,7 +56,7 @@ def request_history(request):
         form_0 = ArticleRequestShowForm()
         form_0.show(order)
         form_0.hide_for_user()
-        form_1 = ArticleRequestAnswerShowForm()
+        form_1 = ArticleRequestAnswerForm()
         form_1.show(
             order.get_answer()
         )
@@ -97,8 +96,9 @@ def add_item_to_cart(request):
             ShoppingCartOrder(UserProfile=UserProfile.objects.get(user=request.user),
                               CatalogItem=lot, amount=amount).save()
         else:
-            ShoppingCartOrder(UserProfile=UserProfile.objects.get(user=request.user), CatalogItem=CatalogItem.objects.get(
-                id=request.POST['id']), amount=0).save()
+            ShoppingCartOrder(UserProfile=UserProfile.objects.get(user=request.user),
+                              CatalogItem=CatalogItem.objects.get(
+                                  id=request.POST['id']), amount=0).save()
         response = HttpResponse(headers={"success": 1})
         return response
     except MultipleObjectsReturned:
@@ -108,13 +108,22 @@ def add_item_to_cart(request):
 
 @login_required
 def shopping_cart(request):
-    forms = []
-    for CartItem in UserProfile.objects.get(user=request.user).get_cart():
+    lot_forms = []
+    for CartItem in UserProfile.objects.get(user=request.user).get_catalog_cart():
         form = CatalogItemForm()
         form.show(CartItem.CatalogItem)
         form.amount_bought = CartItem.amount
-        forms.append(form)
-    return render(request, 'webapp/html/cart.html', {'forms': forms})
+        lot_forms.append(form)
+    request_forms = []
+    for CartItem in UserProfile.objects.get(user=request.user).get_request_cart():
+        form = CatalogItemForm()
+        form.show(CartItem.ArticleRequestAnswer.request)
+        form.initial['CatalogItem_id'] = CartItem.ArticleRequestAnswer.id
+        form.initial['amount'] = CartItem.ArticleRequestAnswer.amount
+        form.initial['price'] = CartItem.ArticleRequestAnswer.price
+        form.amount_bought = CartItem.amount
+        request_forms.append(form)
+    return render(request, 'webapp/html/cart.html', {'lot_forms': lot_forms, 'request_forms': request_forms})
 
 
 @login_required
@@ -128,12 +137,32 @@ def discard_item_from_cart(request):
         response = HttpResponse(headers={"success": 0})
         return response
     except MultipleObjectsReturned:
-        ShoppingCartOrder.objects.filter(UserProfile=UserProfile.objects.get(user=request.user), CatalogItem=CatalogItem.
-                                      objects.get(id=request.POST['id'])).delete()
+        ShoppingCartOrder.objects.filter(UserProfile=UserProfile.objects.get(user=request.user),
+                                         CatalogItem=CatalogItem.
+                                         objects.get(id=request.POST['id'])).delete()
         response = HttpResponse(headers={"success": 1})
         return response
 
 
+@login_required
+def discard_request_from_cart(request):
+    try:
+        ShoppingCartRequest.objects.get(UserProfile=UserProfile.objects.get(user=request.user), ArticleRequestAnswer=
+                                        ArticleRequestAnswer.objects.get(id=request.POST['id'])).delete()
+        response = HttpResponse(headers={"success": 1})
+        return response
+    except ObjectDoesNotExist:
+        response = HttpResponse(headers={"success": 0})
+        return response
+    except MultipleObjectsReturned:
+        ShoppingCartRequest.objects.filter(UserProfile=UserProfile.objects.get(user=request.user),
+                                           ArticleRequestAnswer=ArticleRequestAnswer.
+                                           objects.get(id=request.POST['id'])).delete()
+        response = HttpResponse(headers={"success": 1})
+        return response
+
+
+@login_required
 def set_cart_amount(request):
     try:
         order = ShoppingCartOrder.objects.get(UserProfile=UserProfile.objects.get(user=request.user),
@@ -148,4 +177,31 @@ def set_cart_amount(request):
         return response
     except ObjectDoesNotExist:
         response = HttpResponse(headers={"success": 0})
+        return response
+
+
+@login_required
+def add_request_to_cart(request):
+    try:
+        ShoppingCartRequest.objects.get(UserProfile=UserProfile.objects.get(user=request.user),
+                                        ArticleRequestAnswer=ArticleRequestAnswer.objects.get(
+                                            id=request.POST['id']))
+        response = HttpResponse(headers={"success": 0})
+        return response
+    except ObjectDoesNotExist:
+        shopping_request = ShoppingCartRequest(UserProfile=UserProfile.objects.get(user=request.user),
+                                               ArticleRequestAnswer=ArticleRequestAnswer.objects.get(
+                                                   id=request.POST['id']), amount=0)
+        if shopping_request.ArticleRequestAnswer.request.amount <= shopping_request.ArticleRequestAnswer.amount:
+            shopping_request.amount = shopping_request.ArticleRequestAnswer.request.amount
+        else:
+            shopping_request.amount = shopping_request.ArticleRequestAnswer.amount
+        shopping_request.save()
+        response = HttpResponse(headers={"success": 1})
+        return response
+    except MultipleObjectsReturned:
+        response = HttpResponse(headers={"success": 1})
+        return response
+    except ValueError:
+        response = HttpResponse(headers={"success": -1})
         return response
