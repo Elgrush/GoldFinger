@@ -40,12 +40,12 @@ class ArticleRequestForm(forms.Form):
                             error_messages={'invalid': "Неправильный размер."}, required=False)
     amount = forms.IntegerField(label="Количество изделий:")
     factory = forms.ChoiceField(
-        choices=([('', '----')] + list((i, Factory.objects.all()[i].name) for i in range(len(Factory.objects.all())))),
-        label="Завод изготовитель")
+        choices=([('', '----')] + list((Factory.objects.all()[i].id, Factory.objects.all()[i].name) for i in range(
+            len(Factory.objects.all())))), label="Завод изготовитель")
     type = forms.ChoiceField(
         choices=([('', '----')] + list(
-            (i, JeweleryType.objects.all()[i].name) for i in range(len(JeweleryType.objects.all())))),
-        label="Тип изделия")
+            (JeweleryType.objects.all()[i].id, JeweleryType.objects.all()[i].name) for i in range(
+                len(JeweleryType.objects.all())))), label="Тип изделия")
 
     def __init__(self, *args, **kwargs):
         super(ArticleRequestForm, self).__init__(*args, **kwargs)
@@ -57,9 +57,9 @@ class ArticleRequestForm(forms.Form):
             self.fields[field].widget.attrs['readonly'] = True
 
         self.fields['factory'].choices = ((int(self.cleaned_data.get('factory')),
-                                           Factory.objects.all()[int(self.cleaned_data.get('factory'))]),)
+                                           Factory.objects.get(id=int(self.cleaned_data.get('factory')))),)
         self.fields['type'].choices = ((int(self.cleaned_data.get('type')),
-                                        JeweleryType.objects.all()[int(self.cleaned_data.get('type'))]),)
+                                        JeweleryType.objects.get(id=int(self.cleaned_data.get('type')))),)
 
 
 class ArticleRequestShowForm(forms.ModelForm):
@@ -149,12 +149,12 @@ class CatalogItemForm(forms.ModelForm):
                             label="Размер изделий:",
                             error_messages={'invalid': "Неправильный размер."}, required=False)
     factory = forms.ChoiceField(
-        choices=([('', '----')] + list((i, Factory.objects.all()[i].name) for i in range(len(Factory.objects.all())))),
-        label="Завод изготовитель")
+        choices=([('', '----')] + list((Factory.objects.all()[i].id, Factory.objects.all()[i].name) for i in range(
+            len(Factory.objects.all())))), label="Завод изготовитель")
     type = forms.ChoiceField(
         choices=([('', '----')] + list(
-            (i, JeweleryType.objects.all()[i].name) for i in range(len(JeweleryType.objects.all())))),
-        label="Тип изделия")
+            (JeweleryType.objects.all()[i].id, JeweleryType.objects.all()[i].name) for i in range(len(
+                JeweleryType.objects.all())))), label="Тип изделия")
 
     class Meta:
         model = CatalogItem
@@ -177,6 +177,7 @@ class CatalogItemForm(forms.ModelForm):
         self.fields["article"].label = "Артикул"
         self.fields["size"].label = "Размер"
         self.fields["amount"].label = "Количество"
+        self.fields["price"].label = "Цена"
 
     model = None
 

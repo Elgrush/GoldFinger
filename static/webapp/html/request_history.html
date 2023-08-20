@@ -8,7 +8,10 @@
     <form>
         {% csrf_token %}
         {{ form }}
-        <input type="button"  value="Добавить в корзину" class="add_button">
+        <div>
+            <input type="button"  value="Добавить в корзину" class="add_button">
+            <input type="button"  value="Удалить запрос" class="delete_button">
+        </div>
     </form>
 {% endfor %}
 {% load static %}
@@ -18,6 +21,7 @@
   integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
   crossorigin="anonymous"></script>
 <script src="{% static 'webapp/js/add_request_to_cart.js' %}"></script>
+<script src="{% static 'webapp/js/delete_request.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'webapp/css/request_history.css' %}">
 
 {% endblock %}

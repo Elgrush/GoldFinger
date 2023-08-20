@@ -1,0 +1,11 @@
+.add_image {
+    margin-top: 15px;
+    height: 30px;
+    width: 60%;
+    align-self: center;
+}
+
+.delete_image {
+    width: 25px;
+    border-radius: 300px
+}

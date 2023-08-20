@@ -46,8 +46,9 @@ def create_lot(request):
                 article=form.data['article'],
                 size=form.data['size'],
                 amount=form.data['amount'],
-                factory=Factory.objects.all()[int(form.data['factory'])],
-                type=JeweleryType.objects.all()[int(form.data['type'])]
+                factory=Factory.objects.get(id=int(form.data['factory'])),
+                type=JeweleryType.objects.get(id=int(form.data['type'])),
+                price=form.data['price']
             )
             new_lot.save()
             for image in request.FILES:
@@ -60,8 +61,19 @@ def create_lot(request):
 def edit_lot(request):
     if request.user.is_superuser:
         if request.method == "POST":
+            try:
+                request.POST._mutable = True
+                request.POST['factory'] = Factory.objects.get(id=request.POST['factory'])
+                request.POST['type'] = JeweleryType.objects.get(id=request.POST['type'])
+                request.POST._mutable = False
+            except ValueError:
+                request.POST['factory'] = Factory.objects.get(name=request.POST['factory'])
+                request.POST['type'] = JeweleryType.objects.get(name=request.POST['type'])
+                request.POST._mutable = False
             form = CatalogItemForm(request.POST, request.FILES)
-            if form.is_valid():
+            if form.is_valid() or all(
+                    [x in request.POST.keys() for x in [
+                        'article', 'amount', 'price', 'CatalogItem_id', 'factory', 'type']]):
                 try:
                     request.POST['edit_flag']
                 except KeyError:
@@ -71,10 +83,13 @@ def edit_lot(request):
                     lot = CatalogItem.objects.get(id=form.data['CatalogItem_id'])
                 except CatalogItem.DoesNotExist:
                     return catalog(request, 'Изменить лот', 'submit')
-                for field in lot._meta.get_fields():
-                    if field.name not in ['images', 'id']:
-                        setattr(lot, field.name, request.POST[field.name])
-                lot.save()
+                item = CatalogItem.objects.get(id=request.POST['CatalogItem_id'])
+                item.article = request.POST['article']
+                item.size = request.POST['size']
+                item.price = request.POST['price']
+                item.factory = request.POST['factory']
+                item.type = request.POST['type']
+                item.save()
                 for key in request.FILES:
                     image = request.FILES[key]
                     if 'swap_image_' in key:

@@ -1,6 +1,6 @@
-def owr(origlist):
-    for i in range(len(origlist)//2):
-        swap = origlist[i]
-        origlist[i] = origlist[-i-1]
-        origlist[-i-1] = swap
-    return origlist
+def owr(orig_list):
+    for i in range(len(orig_list)//2):
+        swap = orig_list[i]
+        orig_list[i] = orig_list[-i-1]
+        orig_list[-i-1] = swap
+    return orig_list

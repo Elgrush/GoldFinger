@@ -21,18 +21,12 @@ class JeweleryType(models.Model):
     def __str__(self):
         return self.name
 
-    def self(self):
-        return self
-
 
 class Factory(models.Model):
     name = models.CharField(max_length=150)
 
     def __str__(self):
         return self.name
-
-    def self(self):
-        return self
 
 
 class ArticleRequest(models.Model):

@@ -8,8 +8,8 @@ for (const add_button of add_buttons){
         url: url,
         data:
         {
-            csrfmiddlewaretoken: $(add_button).siblings('input[name="csrfmiddlewaretoken"]').val(),
-            id: $(add_button).siblings("#id_ArticleRequestAnswerId").val(),
+            csrfmiddlewaretoken: $(add_button).closest('div').siblings('input[name="csrfmiddlewaretoken"]').val(),
+            id: $(add_button).closest('div').siblings("#id_ArticleRequestAnswerId").val(),
         },
         success : function(res, status, xhr)
          {

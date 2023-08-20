@@ -37,8 +37,8 @@ def confirm_order(request):
                 article=form.cleaned_data.get('article'),
                 size=form.cleaned_data.get('size'),
                 amount=form.cleaned_data.get('amount'),
-                factory=Factory.objects.all()[int(form.cleaned_data.get('factory'))],
-                type=JeweleryType.objects.all()[int(form.cleaned_data.get('type'))]
+                factory=Factory.objects.get(id=int(form.data['factory'])),
+                type=JeweleryType.objects.get(id=int(form.data['type'])),
             )
             order.save()
             return redirect('/webapp/')
@@ -51,6 +51,9 @@ def order_history(request):
 
 @login_required
 def request_history(request):
+    if request.method == 'POST':
+        ArticleRequest.objects.get(id=request.POST['id']).delete()
+        return redirect('/webapp/')
     forms = []
     for order in ArticleRequest.objects.filter(user=request.user):
         form_0 = ArticleRequestShowForm()
@@ -76,6 +79,7 @@ def catalog(request, button=None, action=None):
         form = CatalogItemForm()
         form.show(catalogObj)
         forms.append(form)
+    forms = owr(forms)
     return render(request, 'webapp/html/catalog.html', {'forms': forms, 'button': button, 'action': action})
 
 
