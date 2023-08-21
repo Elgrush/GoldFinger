@@ -8,5 +8,7 @@ urlpatterns = [
     path('create_lot/', views.create_lot, name='reg/create_lot'),
     path('edit_lot/', views.edit_lot, name='reg/edit_lot'),
     path('delete_lot/', views.delete_lot, name='reg/delete_lot'),
+    path('parse/', views.parse, name='reg/parse'),
+    path('parser/', views.parser, name='reg/parser'),
     path('delete_image/', views.delete_image, name='reg/delete_image'),
 ] + static('edit_lot/', document_root=settings.MEDIA_ROOT) + static('delete_lot/', document_root=settings.MEDIA_ROOT)

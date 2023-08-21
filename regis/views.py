@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from webapp.models import ArticleRequest, Factory, ArticleRequestAnswer, CatalogItem, CatalogItemImage, JeweleryType
 from webapp.forms import ArticleRequestShowForm, ArticleRequestAnswerForm, CatalogItemForm
 from django.forms import modelformset_factory
@@ -114,3 +114,12 @@ def delete_lot(request):
             CatalogItem.objects.get(id=request.POST['CatalogItem_id']).delete()
             return redirect("/regis/")
         return catalog(request, 'Удалить')
+
+
+def parse(request):
+    return render(request, 'regis/html/parse.html')
+
+
+def parser(request):
+    print(request.POST)
+    return HttpResponse(headers={})

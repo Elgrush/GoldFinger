@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<li><a href="/regis/">Вернуться в меню</a></li>
+
+<div class="parse_box">
+    {% csrf_token %}
+    <label for="article_id">Артикул:</label>
+    <input id="article_id">
+    <input type="button" class="parse_button" value="Найти">
+</div>
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'regis/css/parse.css' %}">
+<script
+  src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+  crossorigin="anonymous"></script>
+<script src="{% static 'regis/js/parse.js' %}"></script>
+{% endblock %}

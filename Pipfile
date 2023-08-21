@@ -9,5 +9,7 @@ celery = "*"
 djangorestframework = "*"
 requests = "*"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
+bs4 = "*"
+selenium = "*"
 
 [dev-packages]
