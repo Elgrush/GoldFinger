@@ -1,4 +1,4 @@
-import time
+import json
 from bs4 import BeautifulSoup
 
 from selenium import webdriver
@@ -26,10 +26,10 @@ def request_article(article):
     while True:
         try:
             html = driver.page_source
-            html = BeautifulSoup(html)
+            html = BeautifulSoup(html, "html.parser")
             if 'ничего не найдено' in html.body.find('h1', attrs={'itemprop': 'name'}).text:
                 driver.close()
-                return data
+                return json.dumps(data)
             driver.get(url + html.body.find('a', attrs={'class': 'ProductListItem_product-link__EPUga'})['href'])
             break
         except (TypeError, AttributeError):
@@ -40,7 +40,7 @@ def request_article(article):
     while True:
         try:
             html = driver.page_source
-            html = BeautifulSoup(html)
+            html = BeautifulSoup(html, "html.parser")
 
             divs = html.body.find_all('div', attrs={'class': 'sklv-slider__preview'})
 
@@ -61,9 +61,13 @@ def request_article(article):
             pass
 
     driver.close()
-
-    data.update(text=(html.body.find(
-        'div', attrs={'class': 'sklv-product-page__second'}).find(
-        'div').find_all(
-        'div')[1].text.split('О бренде')[0].split('Характеристики')[1]))
-    return data
+    while True:
+        try:
+            data.update(text=(html.body.find(
+                'div', attrs={'class': 'sklv-product-page__second'}).find(
+                'div').find_all(
+                'div')[1].text.split('О бренде')[0].split('Характеристики')[1]))
+            break
+        except AttributeError:
+            pass
+    return json.dumps(data)

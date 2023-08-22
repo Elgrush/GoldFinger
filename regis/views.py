@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, HttpResponse
 from webapp.models import ArticleRequest, Factory, ArticleRequestAnswer, CatalogItem, CatalogItemImage, JeweleryType
 from webapp.forms import ArticleRequestShowForm, ArticleRequestAnswerForm, CatalogItemForm
-from django.forms import modelformset_factory
 from django.db.utils import IntegrityError
 from webapp.utils import owr
+from regis.sokolov_parser import request_article
 from webapp.views import catalog
 
 
@@ -121,5 +121,5 @@ def parse(request):
 
 
 def parser(request):
-    print(request.POST)
-    return HttpResponse(headers={})
+    data = request_article(request.POST['article'])
+    return HttpResponse(headers={"data": data})
