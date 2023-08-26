@@ -14,15 +14,22 @@ parse_button.on('click', function(){
         },
         success : function(res, status, xhr)
          {
-            let data = JSON.parse(xhr.getResponseHeader("data"));
-            $('.parse_box').add('<p>'+ data['text'] +'</p>'
-            ).appendTo('main');
-            for (const src of data['images']){
-                $('.parse_box').add('<img src='+ src +'>'
+            try {
+                let data = JSON.parse(xhr.getResponseHeader("data"));
+                $('.parse_box').add('<p>'+ data['text'] +'</p>'
+                ).appendTo('main');
+                for (const src of data['images']){
+                    $('.parse_box').add('<img src='+ src +'>'
+                    ).appendTo('main');
+                }
+                article_field.remove();
+                $('label').remove();
+            }
+            catch (TypeError){
+                $('p').remove();
+                $('.parse_box').add('<p> Ничего не найдено </p>'
                 ).appendTo('main');
             }
-            article_field.remove();
-            $('label').remove();
         }
         });
 })

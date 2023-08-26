@@ -1,25 +1,21 @@
 import json
-from bs4 import BeautifulSoup
+import os
 
+from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver import Chrome
 
 
 def request_article(article):
     data = {}
 
-    # start by defining the options
-    options = webdriver.ChromeOptions()
-    options.headless = True  # it's more scalable to work in headless mode
-    # normally, selenium waits for all resources to download
-    # we don't need it as the page also populated with the running javascript code.
-    options.page_load_strategy = 'none'
-
-    # pass the defined options and service objects to initialize the web driver
-    driver = Chrome(options=options)
-    driver.implicitly_wait(5)
-
     url = "https://sokolov.ru/"
+
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+
+    driver = webdriver.Remote(command_executor=os.environ['driver_url'], options=options)
+    driver.close()  # this prevents the dummy browser
+    driver.session_id = os.environ['driver_session_id']
 
     driver.get(url + 'products-search/text/?text=' + str(article))
 
@@ -28,7 +24,6 @@ def request_article(article):
             html = driver.page_source
             html = BeautifulSoup(html, "html.parser")
             if 'ничего не найдено' in html.body.find('h1', attrs={'itemprop': 'name'}).text:
-                driver.close()
                 return json.dumps(data)
             driver.get(url + html.body.find('a', attrs={'class': 'ProductListItem_product-link__EPUga'})['href'])
             break
@@ -60,7 +55,6 @@ def request_article(article):
         except (TypeError, AttributeError):
             pass
 
-    driver.close()
     while True:
         try:
             data.update(text=(html.body.find(
@@ -70,4 +64,5 @@ def request_article(article):
             break
         except AttributeError:
             pass
+    driver.get('data:,')
     return json.dumps(data)
