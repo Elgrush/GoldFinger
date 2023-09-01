@@ -11,5 +11,6 @@ requests = "*"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
 bs4 = "*"
 selenium = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]

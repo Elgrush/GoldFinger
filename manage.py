@@ -24,7 +24,7 @@ def start_browser():
     try:
         print('Recived: ' + os.environ['driver_url'])
     except KeyError:
-        subprocess.Popen('python ' + os.getcwd() + '/webdriver/webdriver_initializer.py')
+        subprocess.Popen('pipenv shell python ' + os.getcwd() + '/webdriver/webdriver_initializer.py')
         time.sleep(10)
         from webdriver import webdriver_config
         os.environ['driver_url'] = webdriver_config.driver_url
