@@ -7,24 +7,6 @@ img {
     display: none;
 }
 
-.right_pointer {
-    position: relative;
-    left: 40%;
-    bottom: 50%;
-}
-
-.left_pointer {
-    position: relative;
-    right: 40%;
-    bottom: 50%;
-}
-
-svg {
-    background-color: #cacaca;
-	padding: 6px;
-	border-radius: 100px;
-}
-
 #hoover_hide {
     display: none;
 }
@@ -35,10 +17,6 @@ svg {
 
 label {
     width: 100%;
-}
-
-input {
- background: #ffdb99;
 }
 
 .add_button {
@@ -126,4 +104,8 @@ input {
     width: 420px;
     height: 320px;
     align-self: center;
+}
+
+#cart_nav_icon{
+    color: #42aaff;
 }

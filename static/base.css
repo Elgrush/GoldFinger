@@ -14,9 +14,7 @@ details{
  overflow:hidden;
  margin-bottom: 1.5rem;
 }
-summary::-webkit-details-marker{display:none;}
-summary::-moz-list-bullet{list-style-type:none;}
-summary::marker{display:none;}
+
 summary {
   display:block;
   padding: .3em 1em .3em .9em;
@@ -70,8 +68,12 @@ button{
 .main_menu{
     position: fixed;
     bottom: 0;
+    height: 50px;
     width: 100%;
     display: flex;
+    border-top: solid;
+    border-top-width: 1px;
+    background-color: white;
 }
 
 .errorlist {
@@ -79,7 +81,6 @@ button{
 }
 
 body{
-  background: #ffdb99;
   text-align: center;
   min-width: 600px;
 }
@@ -139,16 +140,47 @@ tr {
 }
 
 .bottom_nav {
-    display: flex;
+    height: 100%;
     width: 100%;
+    align-self: center;
 }
 
 .bottom_menu {
     width: 100%;
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
     justify-content: space-evenly;
+    height: 100%;
+    margin: 0%;
+    align-content: center;
 }
 
 .bottom_filler {
     height: 50px;
 }
+
+a{
+ display: grid;
+ justify-items: center;
+ text-decoration:none;
+ color: grey;
+}
+
+.right_pointer {
+	background-color: #cacaca;
+	padding: 6px;
+	border-radius: 100px;
+    position: relative;
+    left: 40%;
+    bottom: 50%;
+}
+
+.left_pointer {
+	background-color: #cacaca;
+	padding: 6px;
+	border-radius: 100px;
+    position: relative;
+    right: 40%;
+    bottom: 50%;
+}
+

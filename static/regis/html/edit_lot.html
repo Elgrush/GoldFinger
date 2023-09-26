@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% include 'regis/html/base.html' %}
 <li><a href="/regis/">Вернуться в меню</a></li>
     {% if form.errors %}
     {% for field in form %}

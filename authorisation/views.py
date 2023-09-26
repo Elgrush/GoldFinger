@@ -65,9 +65,9 @@ def log_out(request):
 
 
 @login_required
-def account(request):
+def profile(request):
     profile = UserProfile.objects.get(user=request.user)
-    return render(request, 'authorisation/html/account.html',
+    return render(request, 'authorisation/html/profile.html',
                   {
                       'name': profile.name,
                       'surname': profile.surname,
@@ -78,7 +78,7 @@ def account(request):
 
 
 @login_required
-def edit_account(request):
+def edit_profile(request):
     if request.method == 'POST':
         form = EditForm(request.POST)
         if form.is_valid():
@@ -106,9 +106,9 @@ def edit_account(request):
 
             user.save()
 
-            return redirect('/authorisation/account/')
+            return redirect('/authorisation/profile/')
         else:
-            return render(request, 'authorisation/html/edit_account.html',
+            return render(request, 'authorisation/html/edit_profile.html',
                           {'form': form,
                            'error_message': 'Неверные данные'})
     form = EditForm({
@@ -120,7 +120,7 @@ def edit_account(request):
         'telephone_number': UserProfile.objects.get(user=request.user).telephone_number,
         'address': UserProfile.objects.get(user=request.user).address
     })
-    return render(request, 'authorisation/html/edit_account.html',
+    return render(request, 'authorisation/html/edit_profile.html',
                   {'form': form})
 
 
@@ -150,9 +150,9 @@ def edit_password(request):
 
             user.save()
 
-            return redirect('/authorisation/account/')
+            return redirect('/authorisation/profile/')
         else:
-            return render(request, 'authorisation/html/edit_account.html',
+            return render(request, 'authorisation/html/edit_profile.html',
                           {'form': form,
                            'error_message': 'Неверные данные'})
     form = PasswordChangeForm()
