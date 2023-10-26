@@ -2,11 +2,9 @@
 {% block content %}
 
 <div class="main">
-{% for form in forms %}
+{% for object in objects %}
 <form method="POST">
     {% csrf_token %}
-    {{ form.as_table }}
-    {% with images=form.image_forms %}
     <div class="show_box">
         <img src="#" class="image_to_show">
         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="none" viewBox="0 0 12 16" class="right_pointer" id="hoover_hide" display="none" >
@@ -17,11 +15,13 @@
         </svg>
     </div>
     <div class="image_box">
-    {% for image in images %}
-        {{ image }}
+    {% for image in object.images %}
+        <img src="{{ image }}" />
     {% endfor %}
-    {% endwith %}
     </div>
+    <p> {{ object.price }}₽</p>
+    <p> {{ object.factory }}</p>
+    <p> Тип: {{ object.type }}</p>
     <input type="{{action}}"  value="{{ button }}" class="add_button">
 </form>
 {% endfor %}

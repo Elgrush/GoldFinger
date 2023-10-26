@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from operator import attrgetter
 
 
 # Выполненные заказы пользователя.
@@ -91,7 +92,9 @@ class CatalogItem(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def get_images(self):
-        return CatalogItemImage.objects.filter(CatalogItem=self)
+        return list(map(attrgetter('url'), list(
+            map(attrgetter('image'),
+                CatalogItemImage.objects.filter(CatalogItem=self)))))
 
     def __str__(self):
         return str(self.id)

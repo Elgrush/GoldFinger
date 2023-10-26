@@ -74,13 +74,18 @@ def catalog(request, button=None, action=None):
         button = 'Добавить в корзину'
     if not action:
         action = 'button'
-    forms = []
-    for catalogObj in CatalogItem.objects.all():
-        form = CatalogItemForm()
-        form.show(catalogObj)
-        forms.append(form)
-    forms = owr(forms)
-    return render(request, 'webapp/html/catalog.html', {'forms': forms, 'button': button, 'action': action})
+    objects = []
+    for catalogObj in CatalogItem.objects.order_by('-updated_at')[:20]:
+        objects.append({
+            'article': catalogObj.article,
+            'size': catalogObj.size,
+            'amount': catalogObj.amount,
+            'price': catalogObj.price,
+            'factory': catalogObj.factory,
+            'type': catalogObj.type,
+            'images': catalogObj.get_images()
+        })
+    return render(request, 'webapp/html/catalog.html', {'objects': objects, 'button': button, 'action': action})
 
 
 @login_required
