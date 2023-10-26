@@ -5,7 +5,20 @@ img {
 
 .show_box {
     width: 100%;
+    height: 360px;
 }
+
+.objectInteractionBox {
+    position: relative;
+    left: 30%;
+    bottom: 30px;
+}
+
+
+.catalogForm {
+    display: flow;
+}
+
 
 .image_box {
     display: none;

@@ -3,7 +3,7 @@
 
 <div class="main">
 {% for object in objects %}
-<form method="POST">
+<form method="POST" class="catalogForm">
     {% csrf_token %}
     <div class="show_box">
         <img src="#" class="image_to_show">
@@ -13,16 +13,22 @@
         <svg fill="none" height="16" viewBox="0 0 12 16" width="12" xmlns="http://www.w3.org/2000/svg" class="left_pointer" id="hoover_hide" display="none">
             <path d="m4.77 8 3.37 3.36a.9.9 0 1 1-1.28 1.28l-4-4a.9.9 0 0 1 0-1.28l4-4a.9.9 0 1 1 1.28 1.28z" fill="currentColor"></path>
         </svg>
+
     </div>
     <div class="image_box">
     {% for image in object.images %}
         <img src="{{ image }}" />
     {% endfor %}
     </div>
+    <div class="objectInteractionBox">
+            раз
+            два
+        </div>
+    <div>
     <p> {{ object.price }}₽</p>
     <p> {{ object.factory }}</p>
     <p> Тип: {{ object.type }}</p>
-    <input type="{{action}}"  value="{{ button }}" class="add_button">
+        </div>
 </form>
 {% endfor %}
 </div>
