@@ -12,10 +12,9 @@ def request_article(article):
 
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
+    options.binary_location = os.getcwd() + '../webdriver/chromedriver.exe'
 
-    driver = webdriver.Remote(command_executor=os.environ['driver_url'], options=options)
-    driver.close()  # this prevents the dummy browser
-    driver.session_id = os.environ['driver_session_id']
+    driver = webdriver.Remote(options=options)
 
     driver.get(url + 'products-search/text/?text=' + str(article))
 
