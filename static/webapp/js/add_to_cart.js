@@ -1,4 +1,4 @@
-let add_buttons = $(".add_button");
+let add_buttons = $(".addToCartButton");
 
 for (const add_button of add_buttons){
     let url = window.location.href+'webapp/add_item_to_cart/';

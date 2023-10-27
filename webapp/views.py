@@ -70,13 +70,10 @@ def request_history(request):
 
 @login_required
 def catalog(request, button=None, action=None):
-    if not button:
-        button = 'Добавить в корзину'
-    if not action:
-        action = 'button'
     objects = []
     for catalogObj in CatalogItem.objects.order_by('-updated_at')[:20]:
         objects.append({
+            'id': catalogObj.id,
             'article': catalogObj.article,
             'size': catalogObj.size,
             'amount': catalogObj.amount,
@@ -161,6 +158,7 @@ def discard_request_from_cart(request):
         response = HttpResponse(headers={"success": 1})
         return response
     except ObjectDoesNotExist:
+        print(request.POST['id'])
         response = HttpResponse(headers={"success": 0})
         return response
     except MultipleObjectsReturned:

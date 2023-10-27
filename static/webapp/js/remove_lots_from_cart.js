@@ -1,6 +1,6 @@
 let delete_buttons = $(".discard_item");
 
-function menage_item(delete_button, token){
+function menage_lot_item(delete_button, token){
     if(delete_button.value == "Убрать из корзины"){
         $.ajax({
             type:'POST',
@@ -42,5 +42,5 @@ function menage_item(delete_button, token){
 
 for (const delete_button of delete_buttons){
     let token = $(delete_button).siblings('input[name="csrfmiddlewaretoken"]').val();
-    delete_button.addEventListener("click", function() {menage_item(delete_button, token);});
+    delete_button.addEventListener("click", function() {menage_lot_item(delete_button, token);});
 }
